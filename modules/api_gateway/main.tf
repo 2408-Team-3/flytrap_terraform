@@ -233,3 +233,41 @@ resource "aws_api_gateway_method_response" "promises_post_500_response" {
     "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
   }
 }
+
+resource "aws_api_gateway_integration" "sqs_integration_errors" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.errors.id
+  http_method             = aws_api_gateway_method.post_errors.http_method
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = "arn:aws:apigateway:${var.region}:sqs:path/${var.account_id}/${var.sqs_queue_name}"
+
+  credentials             = aws_iam_role.api_gateway_role.arn
+
+  request_parameters = {
+    "integration.request.header.Content-Type" = "'application/x-www-form-urlencoded'"
+  }
+
+  request_templates = {
+    "application/json" = "Action=SendMessage&MessageBody=$input.body"
+  }
+}
+
+resource "aws_api_gateway_integration" "sqs_integration_promises" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.promises.id
+  http_method             = aws_api_gateway_method.post_promises.http_method
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = "arn:aws:apigateway:${var.region}:sqs:path/${var.account_id}/${var.sqs_queue_name}"
+
+  credentials             = aws_iam_role.api_gateway_role.arn
+
+  request_parameters = {
+    "integration.request.header.Content-Type" = "'application/x-www-form-urlencoded'"
+  }
+
+  request_templates = {
+    "application/json" = "Action=SendMessage&MessageBody=$input.body"
+  }
+}
