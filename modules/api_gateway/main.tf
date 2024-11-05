@@ -355,3 +355,23 @@ resource "aws_api_gateway_integration_response" "sqs_500_response_promises" {
 
   depends_on = [aws_api_gateway_integration.sqs_integration]
 }
+
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  depends_on  = [
+    aws_api_gateway_rest_api.api,
+    aws_api_gateway_resource.errors,
+    aws_api_gateway_resource.promises,
+    aws_api_gateway_method.post_errors,
+    aws_api_gateway_method.post_promises,
+    aws_api_gateway_integration.sqs_integration_errors,
+    aws_api_gateway_integration.sqs_integration_promises
+  ]
+}
+
+# Stage for API Gateway Deployment
+resource "aws_api_gateway_stage" "stage" {
+  deployment_id = aws_api_gateway_deployment.deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  stage_name    = var.stage_name
+}
