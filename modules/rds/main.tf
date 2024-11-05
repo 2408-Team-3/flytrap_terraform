@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "flytrap_db_subnet_group" {
   name       = "flytrap-db-subnet-group"
-  subnet_ids = var.db_subnet_ids # the vpc's two private subnet ids; passed in via module block
+  subnet_ids = var.db_subnet_ids
 
   tags = {
     Name = "flytrap-db-subnet-group"
@@ -15,7 +15,6 @@ resource "aws_security_group" "flytrap_db_sg" {
   # change cidr blocks after all modules run
   # ingress and egress should be the ec2 and lambda ips only
 
-  # sets the inbound rule
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -23,11 +22,35 @@ resource "aws_security_group" "flytrap_db_sg" {
     cidr_blocks = ["0.0.0.0/0"] # change later, after EC2 and lambda are configured
   }
 
-  # sets the outbound rule
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"  # Allow all outbound traffic
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"] # change later, after EC2 and lambda are configured
+  }
+}
+
+data "aws_secretsmanager_secret" "flytrap_db_secret" {
+  name = var.db_secret_name
+}
+
+data "aws_secretsmanager_secret_version" "flytrap_db_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.flytrap_db_secret.id
+}
+
+resource "aws_db_instance" "flytrap_db" {
+  engine                 = "postgres"
+  engine_version         = "16.3"
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 20
+  db_subnet_group_name   = aws_db_subnet_group.flytrap_db_subnet_group.name
+  vpc_security_group_ids = [aws_security_group.flytrap_db_sg.id]
+  username               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
+  password               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
+  db_name                = var.db_name
+  skip_final_snapshot    = true # change to false for production (makes a db backup)
+
+  tags = {
+    Name = "flytrap-db"
   }
 }
