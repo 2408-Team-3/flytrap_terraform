@@ -23,3 +23,21 @@ variable "api_name" {
   type        = string
   default     = "flytrap-api"
 }
+
+variable "base_api_path" {
+  description = "The base path part for API Gateway"
+  type        = string
+  default     = "api"
+}
+
+variable "errors_path" {
+  description = "The 'errors' path ending for API Gateway"
+  type        = string
+  default     = "errors"
+}
+
+variable "promises_path" {
+  description = "The 'promises' path ending for API Gateway"
+  type        = string
+  default     = "promises"
+}

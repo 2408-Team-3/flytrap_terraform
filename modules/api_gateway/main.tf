@@ -33,3 +33,21 @@ resource "aws_iam_role_policy_attachment" "api_gateway_sqs_attach" {
 resource "aws_api_gateway_rest_api" "api" {
   name = var.api_name
 }
+
+resource "aws_api_gateway_resource" "api" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+  path_part   = var.base_api_path
+}
+
+resource "aws_api_gateway_resource" "errors" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
+  path_part   = var.errors_path
+}
+
+resource "aws_api_gateway_resource" "promises" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
+  path_part   = var.promises_path
+}
