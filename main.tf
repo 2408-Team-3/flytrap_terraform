@@ -28,3 +28,11 @@ module "api_gateway" {
   sqs_queue_name = module.sqs.sqs_queue_name
   sqs_queue_arn  = module.sqs.sqs_queue_arn
 }
+
+module "sqs_configure" {
+  source          = "./modules/sqs_configure"
+  api_gateway_arn = module.api_gateway.api_gateway_execution_arn
+  sqs_queue_arn   = module.sqs.sqs_queue_arn
+  sqs_queue_name  = module.sqs.sqs_queue_name
+  sqs_queue_id    = module.sqs.sqs_queue_id
+}
