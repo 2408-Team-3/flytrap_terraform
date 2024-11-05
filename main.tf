@@ -15,7 +15,9 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-# add vpc here
+module "vpc" {
+  source = "./modules/vpc"
+}
 
 module "sqs" {
   source = "./modules/sqs"
