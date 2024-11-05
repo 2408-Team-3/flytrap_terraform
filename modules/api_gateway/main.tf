@@ -149,3 +149,87 @@ resource "aws_api_gateway_method" "post_promises" {
 
   request_validator_id = aws_api_gateway_request_validator.promises_request_validator.id
 }
+
+resource "aws_api_gateway_method_response" "errors_post_200_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_method_response" "errors_post_400_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "400"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_method_response" "errors_post_500_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "500"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_method_response" "promises_post_200_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_method_response" "promises_post_400_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "400"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
+
+resource "aws_api_gateway_method_response" "promises_post_500_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "500"
+
+  response_parameters = {
+    "method.response.header.Content-Type" = true
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
+    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+  }
+}
