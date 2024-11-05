@@ -123,3 +123,29 @@ resource "aws_api_gateway_request_validator" "promises_request_validator" {
   validate_request_body = true
   validate_request_parameters = false
 }
+
+resource "aws_api_gateway_method" "post_errors" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.errors.id
+  http_method   = "POST"
+  authorization = "NONE" # ("API_KEY") allows our SDKs to send error data without authentication tokens or IAM permissions
+
+  request_models = {
+    "application/json" = aws_api_gateway_model.errors_request_model.name
+  }
+
+  request_validator_id = aws_api_gateway_request_validator.errors_request_validator.id
+}
+
+resource "aws_api_gateway_method" "post_promises" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.promises.id
+  http_method   = "POST"
+  authorization = "NONE" # ("API_KEY") allows our SDKs to send error data without authentication tokens or IAM permissions
+
+  request_models = {
+    "application/json" = aws_api_gateway_model.promises_request_model.name
+  }
+
+  request_validator_id = aws_api_gateway_request_validator.promises_request_validator.id
+}
