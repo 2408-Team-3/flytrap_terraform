@@ -128,7 +128,7 @@ resource "aws_api_gateway_method" "post_errors" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.errors.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") allows our SDKs to send error data without authentication tokens or IAM permissions
+  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
 
   request_models = {
     "application/json" = aws_api_gateway_model.errors_request_model.name
@@ -141,7 +141,7 @@ resource "aws_api_gateway_method" "post_promises" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.promises.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") allows our SDKs to send error data without authentication tokens or IAM permissions
+  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
 
   request_models = {
     "application/json" = aws_api_gateway_model.promises_request_model.name
@@ -369,7 +369,6 @@ resource "aws_api_gateway_deployment" "deployment" {
   ]
 }
 
-# Stage for API Gateway Deployment
 resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
