@@ -271,3 +271,87 @@ resource "aws_api_gateway_integration" "sqs_integration_promises" {
     "application/json" = "Action=SendMessage&MessageBody=$input.body"
   }
 }
+
+resource "aws_api_gateway_integration_response" "sqs_200_response_errors" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "200"
+  selection_pattern = "^2[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Successfully processed message\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
+
+resource "aws_api_gateway_integration_response" "sqs_400_response_errors" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "400"
+  selection_pattern = "^4[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Oversized or invalid request\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
+
+resource "aws_api_gateway_integration_response" "sqs_500_response_errors" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.post_errors.http_method
+  status_code = "500"
+  selection_pattern = "^5[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Internal server error while processing message\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
+
+resource "aws_api_gateway_integration_response" "sqs_200_response_promises" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "200"
+  selection_pattern = "^2[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Successfully processed message\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
+
+resource "aws_api_gateway_integration_response" "sqs_400_response_promises" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "400"
+  selection_pattern = "^4[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Oversized or invalid request\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
+
+resource "aws_api_gateway_integration_response" "sqs_500_response_promises" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.promises.id
+  http_method = aws_api_gateway_method.post_promises.http_method
+  status_code = "500"
+  selection_pattern = "^5[0-9][0-9]"
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Internal server error while processing message\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sqs_integration]
+}
