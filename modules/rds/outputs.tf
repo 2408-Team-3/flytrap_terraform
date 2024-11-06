@@ -32,3 +32,8 @@ output "db_endpoint" {
   value       = aws_db_instance.flytrap_db.endpoint
   description = "Connection endpoint for the Flytrap RDS database"
 }
+
+output "db_arn" {
+  value       = aws_db_instance.flytrap_db.arn
+  description = "The ARN of the Flytrap RDS database instance"
+}

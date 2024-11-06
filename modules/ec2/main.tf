@@ -28,7 +28,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
           "rds:ExecuteStatement",
         ]
         Effect   = "Allow"
-        Resource = "*"
+        Resource = var.db_arn
       },
       {
         Action   = [
@@ -46,3 +46,38 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
 resource "aws_iam_role_policy_attachment" "ec2_rds_policy_attachment" {
   role       = aws_iam_role.ec2_role.name
   policy_arn = aws_iam_policy.ec2_permissions_policy.arn
+}
+
+resource "aws_security_group" "flytrap_app_sg" {
+  name        = "allow_http_https"
+  description = "Allow HTTP, HTTPS and RDS inbound traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [var.flytrap_db_sg_id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

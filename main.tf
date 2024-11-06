@@ -23,6 +23,7 @@ module "rds" {
   source        = "./modules/rds"
   vpc_id        = module.vpc.vpc_id
   db_subnet_ids = module.vpc.private_subnet_ids
+  private_subnet_cidr = module.vpc.private_subnet_cidr
 }
 
 module "sqs" {
@@ -56,4 +57,12 @@ module "lambda" {
   private_subnet_cidrs = module.vpc.private_subnet_cidrs
   private_subnet_ids = module.vpc.private_subnet_ids
   sqs_queue_arn = module.sqs.sqs_queue_arn
+}
+
+module "ec2" {
+  source             = "./modules/ec2"
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_id   = module.vpc.public_subnet_id
+  flytrap_db_sg_id   = module.rds.flytrap_db_sg_id
+  db_arn             = module.rds.db_arn
 }

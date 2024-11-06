@@ -12,3 +12,8 @@ output "private_subnet_ids" {
   description = "VPC private subnets IDS"
   value       = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
+
+output "private_subnet_cidr" {
+  description = "VPC private subnet CIDR blocks"
+  value       = [aws_subnet.private_a, aws_subnet.private_b]
+}
