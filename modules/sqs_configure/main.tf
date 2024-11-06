@@ -3,7 +3,8 @@ resource "aws_sqs_queue_policy" "queue_policy" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
+    Statement = [
+    {
       Effect = "Allow"
       Principal = {
         Service = "apigateway.amazonaws.com"
@@ -15,8 +16,19 @@ resource "aws_sqs_queue_policy" "queue_policy" {
           "AWS:SourceArn" = var.api_gateway_arn
         }
       }
-    }]
+    },
+    {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = [
+          "SQS:ReceiveMessage",
+          "SQS:DeleteMessage",
+          "SQS:GetQueueAttributes"
+        ]
+        Resource = var.sqs_queue_arn
+      }
+    ]
   })
 }
-
-# add lambda config after lambda is provisioned
