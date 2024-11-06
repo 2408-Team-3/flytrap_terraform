@@ -44,3 +44,16 @@ module "sqs_configure" {
   sqs_queue_name  = module.sqs.sqs_queue_name
   sqs_queue_id    = module.sqs.sqs_queue_id
 }
+
+module "lambda" {
+  source = "./modules/lambda"
+  vpc_id = module.vpc.vpc_id
+  db_secret_name = module.rds.db_secret_name
+  db_secret_arn = module.rds.db_secret_arn
+  db_endpoint = module.rds.db_endpoint
+  db_name = module.rds.db_name
+  db_instance_arn = module.rds.flytrap_db_arn
+  private_subnet_cidrs = module.vpc.private_subnet_cidrs
+  private_subnet_ids = module.vpc.private_subnet_ids
+  sqs_queue_arn = module.sqs.sqs_queue_arn
+}

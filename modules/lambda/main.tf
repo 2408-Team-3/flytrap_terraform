@@ -85,3 +85,23 @@ resource "aws_security_group" "lambda_sg" {
     cidr_blocks = var.private_subnet_cidrs
   }
 }
+
+resource "aws_lambda_function" "flytrap_lambda" {
+  function_name = "flytrap_lambda_function"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = var.lambda_handler
+  runtime       = var.lambda_runtime # make sure this matches
+  filename      = "${path.root}/lib/flytrap_error_processor.zip"
+
+  environment = {
+    PGHOST      = var.db_endpoint
+    PGPORT      = 5432
+    PGDATABASE  = var.db_name
+    SECRET_NAME = var.db_secret_name
+  }
+
+  vpc_config {
+    subnet_ids          = var.private_subnet_ids
+    security_group_ids  = [aws_security_group.lambda_sg.id]
+  }
+}
