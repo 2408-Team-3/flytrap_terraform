@@ -24,5 +24,7 @@ variable "db_instance_arn" {
   type        = string
 }
 
-
-
+variable "private_subnet_cidrs" {
+  description = "VPC private subnet cidrs"
+  type        = list(string)
+}
