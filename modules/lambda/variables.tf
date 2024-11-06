@@ -24,5 +24,39 @@ variable "db_instance_arn" {
   type        = string
 }
 
+variable "private_subnet_cidrs" {
+  description = "VPC private subnet cidrs"
+  type        = list(string)
+}
 
+variable "lambda_handler" {
+  description = "The handler for the Lambda function"
+  type        = string
+  default     = "lambda.js"
+}
 
+variable "lambda_runtime" {
+  description = "The runtime for the Lambda function"
+  type        = string
+  default     = "nodejs14.x"
+}
+
+variable "db_endpoint" {
+  description = "The endpoint of the RDS database"
+  type        = string
+}
+
+variable "db_name" {
+  description = "The name of the RDS database"
+  type        = string
+}
+
+variable "db_secret_name" {
+  description = "The name of the database secret in Secrets Manager"
+  type        = string
+}
+
+variable "private_subnet_ids" {
+  description = "VPC private subnet ids"
+  type        = list(string)
+}
