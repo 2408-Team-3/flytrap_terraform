@@ -81,3 +81,18 @@ resource "aws_security_group" "flytrap_app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_instance" "flytrap_app" {
+  ami             = var.ami
+  instance_type   = "t2.micro"
+  subnet_id       = var.public_subnet_id
+  security_groups = [aws_security_group.flytrap_app_sg.id]
+
+  iam_instance_profile = aws_iam_role.ec2_role.name
+
+  tags = {
+    Name = "FlytrapApp"
+  }
+
+  associate_public_ip_address = true
+}
