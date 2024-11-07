@@ -57,7 +57,6 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         Resource = "*"
       }
     ]
-    ]
   })
 }
 
