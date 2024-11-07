@@ -65,4 +65,8 @@ module "ec2" {
   public_subnet_id   = module.vpc.public_subnet_id
   flytrap_db_sg_id   = module.rds.flytrap_db_sg_id
   db_arn             = module.rds.db_arn
+  db_host            = module.rds.flytrap_db_endpoint
+  db_name            = module.rds.db_name
+  db_secret_arn      = module.rds.db_secret_arn
+  region             = var.aws_region
 }

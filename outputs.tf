@@ -3,6 +3,7 @@ output "public_api_gateway_url" {
   description = "The public-facing URL for the API Gateway."
 }
 
+# move to variables?
 output "ami" {
   description = "Amazon Machine Image (AMI) for Amazon Linux"
   type        = string
