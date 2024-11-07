@@ -34,7 +34,7 @@ resource "aws_subnet" "public_b" {
 
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.flytrap_vpc.id # id of vpc above
-  cidr_block        = var.private_subnet_cidr[0] # set IP range for the private subnet
+  cidr_block        = var.private_subnet_cidrs[0] # set IP range for the private subnet
   availability_zone = data.aws_availability_zones.available.names[0] # set AZ
 
   tags = {
@@ -44,7 +44,7 @@ resource "aws_subnet" "private_a" {
 
 resource "aws_subnet" "private_b" {
   vpc_id            = aws_vpc.flytrap_vpc.id # id of vpc above
-  cidr_block        = var.private_subnet_cidr[1] # set IP range for the private subnet
+  cidr_block        = var.private_subnet_cidrs[1] # set IP range for the private subnet
   availability_zone = data.aws_availability_zones.available.names[1] # set AZ
 
   tags = {

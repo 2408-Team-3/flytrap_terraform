@@ -23,7 +23,7 @@ module "rds" {
   source              = "./modules/rds"
   vpc_id              = module.vpc.vpc_id
   db_subnet_ids       = module.vpc.private_subnet_ids
-  private_subnet_cidr = module.vpc.private_subnet_cidr
+  private_subnet_cidrs = module.vpc.private_subnet_cidrs
 }
 
 module "sqs_provision" {
@@ -53,7 +53,7 @@ module "lambda" {
   db_secret_arn        = module.rds.db_secret_arn
   db_endpoint          = module.rds.db_endpoint
   db_name              = module.rds.db_name
-  db_instance_arn      = module.rds.flytrap_db_arn
+  db_instance_arn      = module.rds.db_arn
   private_subnet_cidrs = module.vpc.private_subnet_cidrs
   private_subnet_ids   = module.vpc.private_subnet_ids
   sqs_queue_arn        = module.sqs_provision.sqs_queue_arn
@@ -62,12 +62,13 @@ module "lambda" {
 module "ec2" {
   source           = "./modules/ec2"
   vpc_id           = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnet_id
+  public_subnet_id = module.vpc.public_subnet_id[0]
   flytrap_db_sg_id = module.rds.flytrap_db_sg_id
   db_arn           = module.rds.db_arn
   db_host          = module.rds.flytrap_db_endpoint
   db_name          = module.rds.db_name
   db_secret_arn    = module.rds.db_secret_arn
+  db_secret_name    = module.rds.db_secret_name
   region           = var.aws_region
   ami              = var.ami
 }

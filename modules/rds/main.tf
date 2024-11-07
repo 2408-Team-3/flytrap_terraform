@@ -19,14 +19,14 @@ resource "aws_security_group" "flytrap_db_sg" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = var.private_subnet_cidr # later reference lambda and ec2 security groups only
+    cidr_blocks = var.private_subnet_cidrs # later reference lambda and ec2 security groups only
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = var.private_subnet_cidr # later reference lambda and ec2 security groups only (then remove variable and output)
+    cidr_blocks = var.private_subnet_cidrs # later reference lambda and ec2 security groups only (then remove variable and output)
   }
 }
 

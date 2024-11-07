@@ -110,24 +110,27 @@ resource "aws_instance" "flytrap_app" {
   security_groups             = [aws_security_group.flytrap_app_sg.id]
   iam_instance_profile        = aws_iam_role.ec2_role.name
   associate_public_ip_address = true
-  user_data                   = <<-EOF
-                                #!/bin/bash
-                                export AWS_REGION=${var.aws_region}
-                                export DB_HOST=${var.db_host}
-                                export DB_NAME=${var.db_name}
-                                export DB_USER=${local.db_user} #remove
-                                export DB_PASS=${local.db_password} #remove
-                                export DB_PORT=${var.db_port}
-                                EOF
 
   tags = {
     Name = "FlytrapApp"
   }
 
-  # Cloning repos, installing dependencies, and setting up the DB
-  # add error handlers here?
-  # move to scripts folder
+  provisioner "file" {
+    source      = "./scripts/setup_nginx.sh"
+    destination = "/home/ec2-user/setup_nginx.sh"
+  }
 
+  provisioner "file" {
+    source      = "./scripts/setup_gunicorn.sh"
+    destination = "/home/ec2-user/setup_gunicorn.sh"
+  }
+
+  provisioner "file" {
+    source      = "./scripts/setup_env.sh"
+    destination = "/home/ec2-user/setup_env.sh"
+  }
+
+  # add error handlers here?
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
@@ -135,8 +138,6 @@ resource "aws_instance" "flytrap_app" {
       "sudo yum install -y python3-pip",
       "sudo yum install -y postgresql",
       "sudo yum install -y nginx",  # Install Nginx
-
-      # Install Gunicorn
       "pip install gunicorn",  # Install Gunicorn for serving the Flask app
 
       # Clone the UI and API repos
@@ -151,52 +152,16 @@ resource "aws_instance" "flytrap_app" {
       "npm run build",
 
       # Set up the database schema for Flask
-      "cd /home/ec2-user/api && psql -h ${var.db_host} -U ${db_user} -d ${var.db_name} -f /home/ec2-user/api/schema.sql"
+      "cd /home/ec2-user/api && psql -h ${var.db_host} -U ${local.db_user} -d ${var.db_name} -f /home/ec2-user/api/schema.sql",
 
-      # Configure Nginx to serve the React frontend and proxy requests to Flask
-      "sudo mv /home/ec2-user/ui/dist /usr/share/nginx/html",  # Move the React build files to Nginx's web root
-      "sudo bash -c 'echo \"server {
-        listen 80;
-        server_name flytrap-monitor.com;  # Change to your domain or public IP/ change to variable
+      "chmod +x /home/ec2-user/setup_env.sh",
+      "/home/ec2-user/setup_env.sh",  # Run the script to create the .env file
 
-        root /usr/share/nginx/html;  # Path to React build files
-        index index.html;
+      "chmod +x /home/ec2-user/setup_nginx.sh",
+      "/home/ec2-user/setup_nginx.sh",
 
-        location / {
-          try_files $uri /index.html;  # Enable React's client-side routing
-        }
-
-        location /api/ {
-          proxy_pass http://127.0.0.1:5000;  # Proxy API requests to Flask - is this port correct?
-          proxy_set_header Host $host;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Proto $scheme;
-        }
-      }\" > /etc/nginx/conf.d/default.conf'",
-
-      # Restart Nginx to apply the changes
-      "sudo systemctl restart nginx"
-
-      # Create Gunicorn systemd service file
-      "echo '[Unit]
-      Description=Gunicorn instance to serve Flask app
-      After=network.target
-
-      [Service]
-      User=ec2-user
-      Group=ec2-user
-      WorkingDirectory=/home/ec2-user/api
-      ExecStart=/home/ec2-user/api/venv/bin/gunicorn --workers 1 --bind 0.0.0.0:5000 flytrap:app
-      Restart=always
-
-      [Install]
-      WantedBy=multi-user.target' > /etc/systemd/system/gunicorn.service",
-
-      # Reload systemd and start the Gunicorn service
-      "sudo systemctl daemon-reload",
-      "sudo systemctl enable gunicorn",
-      "sudo systemctl start gunicorn"
+      "chmod +x /home/ec2-user/setup_gunicorn.sh",
+      "/home/ec2-user/setup_gunicorn.sh",
     ]
   }
 }

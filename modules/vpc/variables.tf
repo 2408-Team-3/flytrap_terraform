@@ -10,8 +10,8 @@ variable "public_subnet_cidr" {
   default     = ["10.0.5.0/24", "10.0.6.0/24"] # changed from 1 and 2
 }
 
-variable "private_subnet_cidr" {
-  description = "The CIDR block for the private subnets"
+variable "private_subnet_cidrs" {
+  description = "The CIDR blocks for the private subnets"
   type        = list(string)
   default     = ["10.0.3.0/24", "10.0.4.0/24"]
 }

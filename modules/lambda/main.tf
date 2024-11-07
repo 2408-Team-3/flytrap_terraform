@@ -92,11 +92,13 @@ resource "aws_lambda_function" "flytrap_lambda" {
   runtime       = var.lambda_runtime # make sure this matches
   filename      = "${path.root}/lib/flytrap_error_processor.zip"
 
-  environment = {
-    PGHOST      = var.db_endpoint
-    PGPORT      = 5432
-    PGDATABASE  = var.db_name
-    SECRET_NAME = var.db_secret_name
+  environment {
+    variables = {
+      PGHOST      = var.db_endpoint
+      PGPORT      = 5432
+      PGDATABASE  = var.db_name
+      SECRET_NAME = var.db_secret_name
+    }
   }
 
   vpc_config {
