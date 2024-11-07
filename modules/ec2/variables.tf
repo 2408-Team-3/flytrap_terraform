@@ -31,7 +31,6 @@ variable "db_name" {
 variable "ami" {
   description = "Amazon Machine Image (AMI) for Amazon Linux"
   type        = string
-  default     = "ami-06b21ccaeff8cd686" # change? (move to root variables)
 }
 
 variable "region" {
