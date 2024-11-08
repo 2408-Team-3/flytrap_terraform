@@ -6,7 +6,7 @@ mv /home/ec2-user/ui/dist /usr/share/nginx/html
 cat <<EOF > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
-    server_name flytrap-monitor.com;
+    server_name _;
     root /usr/share/nginx/html;
     index index.html;
 

@@ -47,3 +47,8 @@ variable "db_secret_arn" {
   description = "ARN for the db connection secret in Secret Manager"
   type        = string
 }
+
+variable "lambda_sg_id" {
+  description = "Lambda security group id for webhook connection"
+  type        = string
+}

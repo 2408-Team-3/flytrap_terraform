@@ -38,7 +38,7 @@ variable "lambda_handler" {
 variable "lambda_runtime" {
   description = "The runtime for the Lambda function"
   type        = string
-  default     = "nodejs14.x"
+  default     = "nodejs18.x"
 }
 
 variable "db_endpoint" {
