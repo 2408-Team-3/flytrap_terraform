@@ -12,21 +12,15 @@ resource "aws_security_group" "flytrap_db_sg" {
   description = "Allow access to the Flytrap database"
   vpc_id      = var.vpc_id
 
-  # change cidr blocks after all modules run
-  # ingress and egress should be the ec2 and lambda ips only
-
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = var.private_subnet_cidr # later reference lambda and ec2 security groups only
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = var.private_subnet_cidr # later reference lambda and ec2 security groups only (then remove variable and output)
+    cidr_blocks = [
+      var.private_subnet_cidrs[0],  # Allow outbound to private subnets (labmda)
+      var.private_subnet_cidrs[1],
+      var.public_subnet_cidr    # Allow outbound to public subnets (EC2)
+    ]
   }
 }
 

@@ -1,4 +1,9 @@
-output "ami" {
-  description = "Amazon Machine Image (AMI) for Amazon Linux 2023 AMI 2023.6.20241010.0 x86_64 HVM kernel-6.1"
-  type        = string
+output "ec2_url" {
+  description = "EC2 url for accessing frontend and lambda webhook endpoint"
+  value       = aws_instance.flytrap_app.public_dns
+}
+
+output "ec2_security_group_id" {
+  description = "EC2 security group ID"
+  value = aws_security_group.flytrap_app_sg.id
 }

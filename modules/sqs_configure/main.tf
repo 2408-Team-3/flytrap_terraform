@@ -18,17 +18,17 @@ resource "aws_sqs_queue_policy" "queue_policy" {
       }
     },
     {
-        Effect = "Allow"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-        Action = [
-          "SQS:ReceiveMessage",
-          "SQS:DeleteMessage",
-          "SQS:GetQueueAttributes"
-        ]
-        Resource = var.sqs_queue_arn
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
       }
+      Action = [
+        "SQS:ReceiveMessage",
+        "SQS:DeleteMessage",
+        "SQS:GetQueueAttributes"
+      ]
+      Resource = var.sqs_queue_arn
+    }
     ]
   })
 }

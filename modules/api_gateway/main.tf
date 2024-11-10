@@ -82,9 +82,9 @@ resource "aws_api_gateway_model" "errors_request_model" {
 }
 
 resource "aws_api_gateway_request_validator" "errors_request_validator" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  name        = "ErrorsPostRequestValidator"
-  validate_request_body = true
+  rest_api_id                 = aws_api_gateway_rest_api.api.id
+  name                        = "ErrorsPostRequestValidator"
+  validate_request_body       = true
   validate_request_parameters = false
 }
 
@@ -118,9 +118,9 @@ resource "aws_api_gateway_model" "promises_request_model" {
 }
 
 resource "aws_api_gateway_request_validator" "promises_request_validator" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  name        = "PromisesPostRequestValidator"
-  validate_request_body = true
+  rest_api_id                 = aws_api_gateway_rest_api.api.id
+  name                        = "PromisesPostRequestValidator"
+  validate_request_body       = true
   validate_request_parameters = false
 }
 
@@ -157,10 +157,10 @@ resource "aws_api_gateway_method_response" "errors_post_200_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -171,10 +171,10 @@ resource "aws_api_gateway_method_response" "errors_post_400_response" {
   status_code = "400"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -185,10 +185,10 @@ resource "aws_api_gateway_method_response" "errors_post_500_response" {
   status_code = "500"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -199,10 +199,10 @@ resource "aws_api_gateway_method_response" "promises_post_200_response" {
   status_code = "200"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -213,10 +213,10 @@ resource "aws_api_gateway_method_response" "promises_post_400_response" {
   status_code = "400"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -227,10 +227,10 @@ resource "aws_api_gateway_method_response" "promises_post_500_response" {
   status_code = "500"
 
   response_parameters = {
-    "method.response.header.Content-Type" = true
-    "method.response.header.Access-Control-Allow-Origin" = true
-    "method.response.header.Access-Control-Allow-Methods"  = "'POST'"
-    "method.response.header.Access-Control-Allow-Headers"  = "'Content-Type'"
+    "method.response.header.Content-Type"                  = true
+    "method.response.header.Access-Control-Allow-Origin"   = true
+    "method.response.header.Access-Control-Allow-Methods"  = true
+    "method.response.header.Access-Control-Allow-Headers"  = true
   }
 }
 
@@ -241,7 +241,6 @@ resource "aws_api_gateway_integration" "sqs_integration_errors" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.region}:sqs:path/${var.account_id}/${var.sqs_queue_name}"
-
   credentials             = aws_iam_role.api_gateway_role.arn
 
   request_parameters = {
@@ -260,7 +259,6 @@ resource "aws_api_gateway_integration" "sqs_integration_promises" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.region}:sqs:path/${var.account_id}/${var.sqs_queue_name}"
-
   credentials             = aws_iam_role.api_gateway_role.arn
 
   request_parameters = {
@@ -273,95 +271,93 @@ resource "aws_api_gateway_integration" "sqs_integration_promises" {
 }
 
 resource "aws_api_gateway_integration_response" "sqs_200_response_errors" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.errors.id
-  http_method = aws_api_gateway_method.post_errors.http_method
-  status_code = "200"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.errors.id
+  http_method       = aws_api_gateway_method.post_errors.http_method
+  status_code       = aws_api_gateway_method_response.errors_post_200_response.status_code
   selection_pattern = "^2[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Successfully processed message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_errors]
 }
 
 resource "aws_api_gateway_integration_response" "sqs_400_response_errors" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.errors.id
-  http_method = aws_api_gateway_method.post_errors.http_method
-  status_code = "400"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.errors.id
+  http_method       = aws_api_gateway_method.post_errors.http_method
+  status_code       = aws_api_gateway_method_response.errors_post_400_response.status_code
   selection_pattern = "^4[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Oversized or invalid request\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_errors]
 }
 
 resource "aws_api_gateway_integration_response" "sqs_500_response_errors" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.errors.id
-  http_method = aws_api_gateway_method.post_errors.http_method
-  status_code = "500"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.errors.id
+  http_method       = aws_api_gateway_method.post_errors.http_method
+  status_code       = aws_api_gateway_method_response.errors_post_500_response.status_code
   selection_pattern = "^5[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Internal server error while processing message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_errors]
 }
 
 resource "aws_api_gateway_integration_response" "sqs_200_response_promises" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
-  status_code = "200"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.promises.id
+  http_method       = aws_api_gateway_method.post_promises.http_method
+  status_code       = aws_api_gateway_method_response.promises_post_200_response.status_code
   selection_pattern = "^2[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Successfully processed message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
 }
 
 resource "aws_api_gateway_integration_response" "sqs_400_response_promises" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
-  status_code = "400"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.promises.id
+  http_method       = aws_api_gateway_method.post_promises.http_method
+  status_code       = aws_api_gateway_method_response.promises_post_400_response.status_code
   selection_pattern = "^4[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Oversized or invalid request\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
 }
 
 resource "aws_api_gateway_integration_response" "sqs_500_response_promises" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
-  status_code = "500"
+  rest_api_id       = aws_api_gateway_rest_api.api.id
+  resource_id       = aws_api_gateway_resource.promises.id
+  http_method       = aws_api_gateway_method.post_promises.http_method
+  status_code       = aws_api_gateway_method_response.promises_post_500_response.status_code
   selection_pattern = "^5[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Internal server error while processing message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration]
+  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  depends_on  = [
-    aws_api_gateway_rest_api.api,
-    aws_api_gateway_resource.errors,
-    aws_api_gateway_resource.promises,
+
+  depends_on = [
     aws_api_gateway_method.post_errors,
     aws_api_gateway_method.post_promises,
     aws_api_gateway_integration.sqs_integration_errors,

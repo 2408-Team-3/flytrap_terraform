@@ -1,9 +1,3 @@
-variable "lambda_name" {
-  description = "The name of the Lambda function"
-  type        = string
-  default     = "flytrap_lambda_function"
-}
-
 variable "vpc_id" {
   description = "Id of the VPC"
   type        = string
@@ -14,19 +8,9 @@ variable "sqs_queue_arn" {
   type        = string
 }
 
-variable "db_secret_arn" {
-  description = "The ARN of the database secret in Secrets Manager"
+variable "lambda_sg_id" {
+  description = "The security group ID for Lambda access"
   type        = string
-}
-
-variable "db_instance_arn" {
-  description = "ARN for RDS db instance"
-  type        = string
-}
-
-variable "private_subnet_cidrs" {
-  description = "VPC private subnet cidrs"
-  type        = list(string)
 }
 
 variable "lambda_handler" {
@@ -38,7 +22,7 @@ variable "lambda_handler" {
 variable "lambda_runtime" {
   description = "The runtime for the Lambda function"
   type        = string
-  default     = "nodejs14.x"
+  default     = "nodejs18.x"
 }
 
 variable "db_endpoint" {
@@ -59,4 +43,14 @@ variable "db_secret_name" {
 variable "private_subnet_ids" {
   description = "VPC private subnet ids"
   type        = list(string)
+}
+
+variable "ec2_url" {
+  description = "EC2 url for accessing frontend and lambda webhook endpoint"
+  type        = string
+}
+
+variable "lambda_iam_role_arn" {
+  description = "ARN for the lambda IAM role"
+  type        = string
 }

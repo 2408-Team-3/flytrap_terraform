@@ -3,9 +3,9 @@ output "vpc_id" {
   value       = aws_vpc.flytrap_vpc.id
 }
 
-output "public_subnet_ids" {
+output "public_subnet_id" {
   description = "VPC public subnets IDs"
-  value       = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+  value       = [aws_subnet.public_a.id]
 }
 
 output "private_subnet_ids" {
@@ -13,7 +13,12 @@ output "private_subnet_ids" {
   value       = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
-output "private_subnet_cidr" {
+output "private_subnet_cidrs" {
   description = "VPC private subnet CIDR blocks"
-  value       = [aws_subnet.private_a, aws_subnet.private_b]
+  value       = [aws_subnet.private_a.cidr_block, aws_subnet.private_b.cidr_block]
+}
+
+output "public_subnet_cidr" {
+  description = "VPC private subnet CIDR blocks"
+  value       = aws_subnet.public_a.cidr_block
 }

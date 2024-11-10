@@ -3,6 +3,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "account_id" {
+  description = "AWS account id"
+  type = string
+}
+
 variable "public_subnet_id" {
   description = "Flytrap public subnet id"
   type        = string
@@ -28,10 +33,14 @@ variable "db_name" {
   type        = string
 }
 
+variable "db_secret_name" {
+  description = "AWS secret name for database credentials"
+  type        = string
+}
+
 variable "ami" {
   description = "Amazon Machine Image (AMI) for Amazon Linux"
   type        = string
-  default     = "ami-06b21ccaeff8cd686" # change? (move to root variables)
 }
 
 variable "region" {
@@ -41,5 +50,10 @@ variable "region" {
 
 variable "db_secret_arn" {
   description = "ARN for the db connection secret in Secret Manager"
+  type        = string
+}
+
+variable "lambda_sg_id" {
+  description = "Lambda security group id for webhook connection"
   type        = string
 }
