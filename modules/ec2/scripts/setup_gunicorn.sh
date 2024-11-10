@@ -9,7 +9,7 @@ After=network.target
 User=ec2-user
 Group=ec2-user
 WorkingDirectory=/home/ec2-user/api
-ExecStart=/home/ec2-user/api/venv/bin/gunicorn --workers 1 --bind 0.0.0.0:5000 flytrap:app
+ExecStart=/home/ec2-user/api/venv/bin/gunicorn --workers 1 --bind 127.0.0.1:5000 flytrap:app
 Restart=always
 
 [Install]

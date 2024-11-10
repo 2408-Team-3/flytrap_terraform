@@ -20,7 +20,12 @@ variable "db_name" {
   default = "flytrap_db"
 }
 
+variable "public_subnet_cidr" {
+  description = "VPC's public subnet CIDR block"
+  type        = string
+}
+
 variable "private_subnet_cidrs" {
-  description = "VPC's private subnet cidr blocks"
+  description = "VPC's public subnet CIDR blocks"
   type        = list(string)
 }

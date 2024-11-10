@@ -3,6 +3,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "account_id" {
+  description = "AWS account id"
+  type = string
+}
+
 variable "public_subnet_id" {
   description = "Flytrap public subnet id"
   type        = string

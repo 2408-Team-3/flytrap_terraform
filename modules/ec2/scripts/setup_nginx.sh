@@ -3,7 +3,7 @@
 mv /home/ec2-user/ui/dist /usr/share/nginx/html
 
 # Write Nginx configuration
-cat <<EOF > /etc/nginx/conf.d/default.conf
+cat <<'EOF' > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
     server_name _;

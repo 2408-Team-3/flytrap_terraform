@@ -45,6 +45,11 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         ],
         "Effect": "Allow",
         "Resource": var.db_secret_arn
+      },
+      {
+        Action    = "ec2-instance-connect:SendSSHPublicKey"
+        Effect    = "Allow"
+        Resource  = "arn:aws:ec2:${var.region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
       }
     ]
   })
@@ -97,6 +102,13 @@ resource "aws_security_group" "flytrap_app_sg" {
     security_groups = [var.flytrap_db_sg_id]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # limit?
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -147,8 +159,8 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 }
 
 locals {
-  setup_nginx_script = file("${path.module}/scripts/nginx_config.sh")
-  setup_gunicorn_script = file("${path.module}/scripts/gunicorn_service.sh")
+  setup_nginx_script = file("${path.module}/scripts/setup_nginx.sh")
+  setup_gunicorn_script = file("${path.module}/scripts/setup_gunicorn.sh")
   setup_env_script = file("${path.module}/scripts/setup_env.sh")
 }
 
@@ -158,14 +170,22 @@ resource "aws_instance" "flytrap_app" {
   subnet_id                   = var.public_subnet_id
   security_groups             = [aws_security_group.flytrap_app_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
+
+  # for ssh
   associate_public_ip_address = true
+  metadata_options {
+    http_tokens = "required"
+    http_endpoint = "enabled"
+  }
+
   user_data                   = templatefile("${path.module}/scripts/setup_scripts.sh", {
-    setup_env_script    = local.setup_env_script
-    setup_nginx_script  = local.setup_nginx_script
+    setup_env_script      = local.setup_env_script
+    setup_nginx_script    = local.setup_nginx_script
     setup_gunicorn_script = local.setup_gunicorn_script
-    db_host = var.db_host
-    db_user = local.db_user
-    db_name  = var.db_name
+    db_host               = var.db_host
+    db_user               = local.db_user
+    db_name               = var.db_name
+    db_password           = local.db_password
   })
 
   tags = {
