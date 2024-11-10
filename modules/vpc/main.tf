@@ -21,17 +21,6 @@ resource "aws_subnet" "public_a" {
   }
 }
 
-resource "aws_subnet" "public_b" {
-  vpc_id                  = aws_vpc.flytrap_vpc.id # id of vpc above
-  cidr_block              = var.public_subnet_cidr[1] # set IP range for the public subnet
-  availability_zone       = data.aws_availability_zones.available.names[1] # set AZ
-  map_public_ip_on_launch = true # all instances on public subnet get a public IP
-
-  tags = {
-    Name = "flytrap-public-subnet-b" # this shows up as the public subnet name in AWS
-  }
-}
-
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.flytrap_vpc.id # id of vpc above
   cidr_block        = var.private_subnet_cidrs[0] # set IP range for the private subnet
