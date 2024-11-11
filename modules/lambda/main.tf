@@ -1,3 +1,17 @@
+data "aws_secretsmanager_secret" "flytrap_db_secret" {
+  name = var.db_secret_name
+}
+
+data "aws_secretsmanager_secret_version" "flytrap_db_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.flytrap_db_secret.id
+}
+
+locals {
+  db_user = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
+  db_password = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
+}
+
+
 resource "aws_lambda_function" "flytrap_lambda" {
   function_name = "flytrap_lambda_function"
   role          = var.lambda_iam_role_arn
@@ -8,10 +22,12 @@ resource "aws_lambda_function" "flytrap_lambda" {
 
   environment {
     variables = {
-      PGHOST      = var.db_endpoint
+      PGHOST      = var.db_host
       PGPORT      = 5432
       PGDATABASE  = var.db_name
-      SECRET_NAME = var.db_secret_name
+      PGUSER     = local.db_user
+      PGPASSWORD  = local.db_password
+     # SECRET_NAME = var.db_secret_name
       WEBHOOK_ENDPOINT = var.ec2_url
     }
   }

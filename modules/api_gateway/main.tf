@@ -59,7 +59,7 @@ resource "aws_api_gateway_model" "errors_request_model" {
   schema = jsonencode({
     type = "object"
       properties = {
-        data = {
+        LogData = {
           type = "object"
           properties = {
             error = {
@@ -78,6 +78,7 @@ resource "aws_api_gateway_model" "errors_request_model" {
           required = ["error", "handled", "timestamp", "project_id"]
         }
       }
+      required = ["LogData"]
   })
 }
 
@@ -94,9 +95,8 @@ resource "aws_api_gateway_model" "promises_request_model" {
   content_type = "application/json"
   schema = jsonencode({
     type = "object"
-
     properties = {
-      data = {
+      LogData = {
         type = "object"
         properties = {
           value = {
@@ -114,6 +114,7 @@ resource "aws_api_gateway_model" "promises_request_model" {
         required = ["value", "handled", "timestamp", "project_id"]
       }
     }
+    required = ["LogData"]
   })
 }
 

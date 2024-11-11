@@ -60,7 +60,10 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         Action   = [
           "ec2:CreateNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
-          "ec2:DeleteNetworkInterface"
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeSubnets",
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:UnassignPrivateIpAddresses"
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -91,5 +94,43 @@ resource "aws_security_group" "lambda_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = var.private_subnet_cidrs
+  }
+}
+
+resource "aws_security_group" "secrets_manager_sg" {
+  name        = "secrets-manager-sg"
+  description = "Allow Lambda access to Secrets Manager"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port         = 443
+    to_port           = 443
+    protocol          = "tcp"
+    security_groups   = [aws_security_group.lambda_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "secrets-manager-sg"
+  }
+}
+
+data "aws_region" "current" {}
+
+resource "aws_vpc_endpoint" "secrets_manager" {
+  vpc_id             = var.vpc_id
+  service_name       = "com.amazonaws.${data.aws_region.current.name}.secretsmanager"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = var.private_subnet_ids
+  security_group_ids = [aws_security_group.secrets_manager_sg.id]
+
+  tags = {
+    Name = "secrets-manager-endpoint"
   }
 }
