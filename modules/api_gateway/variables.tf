@@ -39,7 +39,7 @@ variable "errors_path" {
 variable "promises_path" {
   description = "The 'promises' path ending for API Gateway"
   type        = string
-  default     = "promises"
+  default     = "rejections"
 }
 
 variable "stage_name" {

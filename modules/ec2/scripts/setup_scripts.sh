@@ -34,8 +34,8 @@ npm run build
 # Set up the database schema for Flask
 # experimenting with quotes here
 #cd /home/ec2-user/api && PGPASSWORD="${db_password}" psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /home/ec2-user/api/schema.sql
-
-cd /home/ec2-user/api &&. sudo -u postgres PGPASSWORD="${db_password}" psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /home/ec2-user/api/schema.sql
+logger "Connecting to database on host: ${db_host}, user: ${db_user}, database: ${db_name} using PGPASSWORD: ${db_password}"
+cd /home/ec2-user/api && PGPASSWORD="${db_password}" psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /home/ec2-user/api/schema.sql
 
 # Insert scripts as variables and make them executable
 echo "${setup_env_script}" > /home/ec2-user/setup_env.sh

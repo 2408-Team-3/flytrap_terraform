@@ -23,11 +23,6 @@ variable "db_arn" {
   type        = string
 }
 
-variable "db_host" {
-  description = "Flytrap RDS endpoint for db connection"
-  type        = string
-}
-
 variable "db_name" {
   description = "Flytrap RDS endpoint for db connection"
   type        = string
@@ -55,5 +50,10 @@ variable "db_secret_arn" {
 
 variable "lambda_sg_id" {
   description = "Lambda security group id for webhook connection"
+  type        = string
+}
+
+variable "db_host" {
+  description = "Hostname for the Flytrap RDS database for psql"
   type        = string
 }

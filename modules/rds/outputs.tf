@@ -28,10 +28,18 @@ output "db_secret_arn" {
   description = "The ARN of the AWS Secrets Manager secret containing RDS credentials"
 }
 
+# this is endpoint :port; delete?
 output "db_endpoint" {
   value       = aws_db_instance.flytrap_db.endpoint
   description = "Connection endpoint for the Flytrap RDS database"
 }
+
+# this is endpoint with no port (for psql)
+output "db_host" {
+  value       = aws_db_instance.flytrap_db.address
+  description = "Hostname for the Flytrap RDS database for psql"
+}
+
 
 output "db_arn" {
   value       = aws_db_instance.flytrap_db.arn

@@ -14,8 +14,7 @@ PGPORT="5432"
 JWT_SECRET_KEY="${JWT_SECRET_KEY}"
 HTTPONLY="True"
 SECURE="False"
-SAMESITE="Strict"
-PATH="/"
+SAMESITE="None"
 EOF
 
 # Ensure correct permissions on the .env file

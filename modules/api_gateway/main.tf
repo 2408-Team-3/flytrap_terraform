@@ -94,7 +94,6 @@ resource "aws_api_gateway_model" "promises_request_model" {
   content_type = "application/json"
   schema = jsonencode({
     type = "object"
-
     properties = {
       data = {
         type = "object"

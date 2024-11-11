@@ -16,7 +16,7 @@ variable "lambda_sg_id" {
 variable "lambda_handler" {
   description = "The handler for the Lambda function"
   type        = string
-  default     = "lambda.js"
+  default     = "processor.handler"
 }
 
 variable "lambda_runtime" {
@@ -25,7 +25,7 @@ variable "lambda_runtime" {
   default     = "nodejs18.x"
 }
 
-variable "db_endpoint" {
+variable "db_host" {
   description = "The endpoint of the RDS database"
   type        = string
 }

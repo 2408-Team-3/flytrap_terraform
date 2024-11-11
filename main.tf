@@ -38,6 +38,7 @@ module "lambda_configure" {
   db_secret_arn        = module.rds.db_secret_arn
   db_instance_arn      = module.rds.db_arn
   private_subnet_cidrs = module.vpc.private_subnet_cidrs
+  private_subnet_ids   = module.vpc.private_subnet_ids
 }
 
 module "ec2" {
@@ -48,7 +49,7 @@ module "ec2" {
   lambda_sg_id     = module.lambda_configure.lambda_sg_id
   flytrap_db_sg_id = module.rds.flytrap_db_sg_id
   db_arn           = module.rds.db_arn
-  db_host          = module.rds.flytrap_db_endpoint
+  db_host          = module.rds.db_host
   db_name          = module.rds.db_name
   db_secret_arn    = module.rds.db_secret_arn
   db_secret_name   = module.rds.db_secret_name
@@ -76,7 +77,7 @@ module "lambda" {
   source              = "./modules/lambda"
   vpc_id              = module.vpc.vpc_id
   db_secret_name      = module.rds.db_secret_name
-  db_endpoint         = module.rds.db_endpoint
+  db_host             = module.rds.db_host
   db_name             = module.rds.db_name
   lambda_sg_id        = module.lambda_configure.lambda_sg_id
   lambda_iam_role_arn = module.lambda_configure.lambda_iam_role_arn
