@@ -74,9 +74,9 @@ resource "aws_security_group" "flytrap_app_sg" {
 
   # Allow HTTP access from Lambda (via security group)
   ingress {
-    from_port      = 80
-    to_port        = 80
-    protocol       = "tcp"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [var.lambda_sg_id]  # Lambda's security group
   }
 
@@ -89,9 +89,9 @@ resource "aws_security_group" "flytrap_app_sg" {
 
   # Allow HTTPS access from Lambda (via security group)
   ingress {
-    from_port      = 443
-    to_port        = 443
-    protocol       = "tcp"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
     security_groups = [var.lambda_sg_id]  # Lambda's security group
   }
 
@@ -149,7 +149,7 @@ data "aws_secretsmanager_secret_version" "flytrap_db_secret_version" {
 
 # remove password after flask setup (only need user to run sql script)
 locals {
-  db_user = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
+  db_user     = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
   db_password = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
 }
 
@@ -159,9 +159,9 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 }
 
 locals {
-  setup_nginx_script = file("${path.module}/scripts/setup_nginx.sh")
+  setup_nginx_script    = file("${path.module}/scripts/setup_nginx.sh")
   setup_gunicorn_script = file("${path.module}/scripts/setup_gunicorn.sh")
-  setup_env_script = file("${path.module}/scripts/setup_env.sh")
+  setup_env_script      = file("${path.module}/scripts/setup_env.sh")
 }
 
 resource "aws_instance" "flytrap_app" {
@@ -177,6 +177,7 @@ resource "aws_instance" "flytrap_app" {
     http_tokens = "required"
     http_endpoint = "enabled"
   }
+
 
   user_data                   = templatefile("${path.module}/scripts/setup_scripts.sh", {
     setup_env_script      = local.setup_env_script
