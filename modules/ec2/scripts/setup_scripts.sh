@@ -28,7 +28,7 @@ echo "${setup_env_script}" > /home/ec2-user/setup_env.sh
 chmod +x /home/ec2-user/setup_env.sh
 /home/ec2-user/setup_env.sh
 
-# Create Dockerfile in API folder if it doesn't already exist
+# Create Dockerfile in API folder
 cat <<EOF > /home/ec2-user/api/Dockerfile
 # Dockerfile for Flytrap API
 FROM python:3.9
@@ -43,7 +43,7 @@ cd /home/ec2-user/api
 docker build -t flytrap_api .
 docker run -d --name flytrap_api_container -p 8000:8000 --env-file .env flytrap_api
 
-# Insert scripts as variables and make them executable
+# Insert nginx setup script as variable and make executable
 echo "${setup_nginx_script}" > /home/ec2-user/setup_nginx.sh
 chmod +x /home/ec2-user/setup_nginx.sh
 /home/ec2-user/setup_nginx.sh

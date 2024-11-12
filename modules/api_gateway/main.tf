@@ -42,13 +42,13 @@ resource "aws_api_gateway_resource" "api" {
 
 resource "aws_api_gateway_resource" "errors" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
+  parent_id   = aws_api_gateway_resource.api.id
   path_part   = var.errors_path
 }
 
 resource "aws_api_gateway_resource" "rejections" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
+  parent_id   = aws_api_gateway_resource.api.id
   path_part   = var.rejections_path
 }
 
@@ -129,7 +129,7 @@ resource "aws_api_gateway_method" "post_errors" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.errors.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
+  authorization = "API_KEY"
 
   request_models = {
     "application/json" = aws_api_gateway_model.errors_request_model.name
@@ -142,7 +142,7 @@ resource "aws_api_gateway_method" "post_rejections" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.rejections.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
+  authorization = "API_KEY"
 
   request_models = {
     "application/json" = aws_api_gateway_model.rejections_request_model.name
@@ -370,4 +370,13 @@ resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = var.stage_name
+}
+
+resource "aws_api_gateway_usage_plan" "usage_plan" {
+  name = "flytrap_usage_plan"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.api.id
+    stage  = aws_api_gateway_stage.stage.stage_name
+  }
 }

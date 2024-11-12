@@ -177,12 +177,14 @@ resource "aws_instance" "flytrap_app" {
   }
 
   user_data = templatefile("${path.module}/scripts/setup_scripts.sh", {
-    setup_env_script      = local.setup_env_script
-    setup_nginx_script    = local.setup_nginx_script
-    db_host               = var.db_host
-    db_user               = local.db_user
-    db_name               = var.db_name
-    db_password           = local.db_password
+    setup_env_script          = local.setup_env_script
+    setup_nginx_script        = local.setup_nginx_script
+    db_host                   = var.db_host
+    db_user                   = local.db_user
+    db_name                   = var.db_name
+    db_password               = local.db_password
+    api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
+    region                    = var.region
   })
 
   tags = {

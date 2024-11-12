@@ -57,3 +57,8 @@ variable "db_host" {
   description = "Hostname for the Flytrap RDS database for psql"
   type        = string
 }
+
+variable "api_gateway_usage_plan_id" {
+  description = "API Gateway useage plan ID for API keys "
+  type = string
+}
