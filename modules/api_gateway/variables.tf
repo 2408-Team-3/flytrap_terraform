@@ -36,8 +36,8 @@ variable "errors_path" {
   default     = "errors"
 }
 
-variable "promises_path" {
-  description = "The 'promises' path ending for API Gateway"
+variable "rejections_path" {
+  description = "The 'rejections' path ending for API Gateway"
   type        = string
   default     = "rejections"
 }
