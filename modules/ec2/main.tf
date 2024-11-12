@@ -77,7 +77,7 @@ resource "aws_security_group" "flytrap_app_sg" {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = [var.lambda_sg_id]  # Lambda's security group
+    security_groups = [var.lambda_sg_id]
   }
 
   ingress {
@@ -92,7 +92,7 @@ resource "aws_security_group" "flytrap_app_sg" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    security_groups = [var.lambda_sg_id]  # Lambda's security group
+    security_groups = [var.lambda_sg_id]
   }
 
   ingress {
@@ -106,7 +106,7 @@ resource "aws_security_group" "flytrap_app_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # limit?
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -140,14 +140,13 @@ resource "aws_route_table_association" "public_subnet_association" {
 }
 
 data "aws_secretsmanager_secret" "flytrap_db_secret" {
-  name = var.db_secret_name  # The name of your secret in Secrets Manager
+  name = var.db_secret_name
 }
 
 data "aws_secretsmanager_secret_version" "flytrap_db_secret_version" {
   secret_id = data.aws_secretsmanager_secret.flytrap_db_secret.id
 }
 
-# remove password after flask setup (only need user to run sql script)
 locals {
   db_user     = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
   db_password = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]

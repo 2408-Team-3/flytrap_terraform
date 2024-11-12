@@ -17,7 +17,7 @@ variable "db_secret_name" {
 variable "db_name" {
   description = "The name of the database to connect to"
   type        = string
-  default = "flytrap_db"
+  default     = "flytrap_db"
 }
 
 variable "public_subnet_cidr" {
