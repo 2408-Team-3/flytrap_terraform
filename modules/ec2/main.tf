@@ -160,7 +160,6 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 
 locals {
   setup_nginx_script    = file("${path.module}/scripts/setup_nginx.sh")
-  setup_gunicorn_script = file("${path.module}/scripts/setup_gunicorn.sh")
   setup_env_script      = file("${path.module}/scripts/setup_env.sh")
 }
 
@@ -178,11 +177,9 @@ resource "aws_instance" "flytrap_app" {
     http_endpoint = "enabled"
   }
 
-
-  user_data                   = templatefile("${path.module}/scripts/setup_scripts.sh", {
+  user_data = templatefile("${path.module}/scripts/setup_scripts.sh", {
     setup_env_script      = local.setup_env_script
     setup_nginx_script    = local.setup_nginx_script
-    setup_gunicorn_script = local.setup_gunicorn_script
     db_host               = var.db_host
     db_user               = local.db_user
     db_name               = var.db_name

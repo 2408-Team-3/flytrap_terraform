@@ -5,7 +5,7 @@ variable "vpc_id" {
 
 variable "account_id" {
   description = "AWS account id"
-  type = string
+  type        = string
 }
 
 variable "public_subnet_id" {

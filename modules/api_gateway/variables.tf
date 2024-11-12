@@ -44,6 +44,6 @@ variable "promises_path" {
 
 variable "stage_name" {
   description = "Stage name for API Gateway"
-  type = string
-  default = "prod"
+  type        = string
+  default     = "prod"
 }
