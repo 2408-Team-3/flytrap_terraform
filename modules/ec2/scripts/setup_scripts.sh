@@ -8,7 +8,7 @@ newgrp docker # Make the new group membership take effect immediately
 
 cd /home/ec2-user
 git clone https://github.com/2408-Team-3/flytrap_ui.git ui
-git clone -b docker_prod https://github.com/2408-Team-3/flytrap_api.git api
+git clone -b production https://github.com/2408-Team-3/flytrap_api.git api
 
 # Ensure ec2-user has the correct permissions for the cloned repositories
 sudo chown -R ec2-user:ec2-user /home/ec2-user/ui
