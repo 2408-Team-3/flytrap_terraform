@@ -38,7 +38,7 @@ variable "ami" {
   type        = string
 }
 
-variable "region" {
+variable "aws_region" {
   description = "AWS region - setting as env variable for db connection in Flask"
   type        = string
 }

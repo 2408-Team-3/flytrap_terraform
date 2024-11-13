@@ -61,7 +61,7 @@ module "ec2" {
   db_name                   = module.rds.db_name
   db_secret_arn             = module.rds.db_secret_arn
   db_secret_name            = module.rds.db_secret_name
-  region                    = var.aws_region
+  aws_region                = var.aws_region
   ami                       = var.ami
   api_gateway_usage_plan_id = module.api_gateway.api_gateway_usage_plan_id
 }

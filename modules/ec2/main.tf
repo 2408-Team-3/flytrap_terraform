@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ec2_role" {
-  name               = "EC2RoleForRDSAccess"
+  name               = "flytrap-ec2-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -49,7 +49,17 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
       {
         Action    = "ec2-instance-connect:SendSSHPublicKey"
         Effect    = "Allow"
-        Resource  = "arn:aws:ec2:${var.region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
+        Resource  = "arn:aws:ec2:${var.aws_region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
+      },
+      {
+        Action    = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer"
+        ]
+        Effect    = "Allow"
+        Resource  = "arn:aws:ecr:us-east-1:266735799562:repository/flytrap-api-repo"
       }
     ]
   })
@@ -159,7 +169,6 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 
 locals {
   setup_nginx_script    = file("${path.module}/scripts/setup_nginx.sh")
-  setup_env_script      = file("${path.module}/scripts/setup_env.sh")
 }
 
 resource "aws_instance" "flytrap_app" {
@@ -177,14 +186,13 @@ resource "aws_instance" "flytrap_app" {
   }
 
   user_data = templatefile("${path.module}/scripts/setup_scripts.sh", {
-    setup_env_script          = local.setup_env_script
     setup_nginx_script        = local.setup_nginx_script
     db_host                   = var.db_host
     db_user                   = local.db_user
     db_name                   = var.db_name
     db_password               = local.db_password
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
-    region                    = var.region
+    aws_region                = var.aws_region
     JWT_SECRET_KEY            = var.JWT_SECRET_KEY
   })
 
