@@ -129,7 +129,8 @@ resource "aws_api_gateway_method" "post_errors" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.errors.id
   http_method   = "POST"
-  authorization = "API_KEY"
+  authorization = "NONE"
+  api_key_required = true
 
   request_models = {
     "application/json" = aws_api_gateway_model.errors_request_model.name
@@ -142,7 +143,8 @@ resource "aws_api_gateway_method" "post_rejections" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.rejections.id
   http_method   = "POST"
-  authorization = "API_KEY"
+  authorization = "NONE"
+  api_key_required = true
 
   request_models = {
     "application/json" = aws_api_gateway_model.rejections_request_model.name

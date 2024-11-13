@@ -23,10 +23,32 @@ npm run build
 cd /home/ec2-user/api
 PGPASSWORD="${db_password}" psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /home/ec2-user/api/schema.sql
 
+JWT_SECRET_KEY=$(openssl rand -hex 32) # get from secret manager
+
+# Directly create .env file with necessary environment variables
+cat <<EOF > /home/ec2-user/api/.env
+FLASK_APP="flytrap.py"
+FLASK_ENV="production"
+PGUSER="${db_user}"
+PGHOST="${db_host}"
+PGDATABASE="${db_name}"
+PGPASSWORD="${db_password}"
+PGPORT="5432"
+JWT_SECRET_KEY="${JWT_SECRET_KEY}"
+HTTPONLY="True"
+SECURE="True"
+SAMESITE="None"
+USAGE_PLAN_ID="${api_gateway_usage_plan_id}"
+AWS_REGION="${region}"
+EOF
+
+# Ensure correct permissions on the .env file
+chmod 644 /home/ec2-user/api/.env
+
 # Create .env file in api folder
-echo "${setup_env_script}" > /home/ec2-user/setup_env.sh
-chmod +x /home/ec2-user/setup_env.sh
-/home/ec2-user/setup_env.sh
+# echo "${setup_env_script}" > /home/ec2-user/setup_env.sh
+# chmod +x /home/ec2-user/setup_env.sh
+# /home/ec2-user/setup_env.sh
 
 # Create Dockerfile in API folder
 cat <<EOF > /home/ec2-user/api/Dockerfile

@@ -7,7 +7,7 @@ cat <<'EOF' > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
     server_name _;
-    root /usr/share/nginx/html;
+    root /usr/share/nginx/html/dist;
     index index.html;
 
     location / {
