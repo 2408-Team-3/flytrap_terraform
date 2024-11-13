@@ -1,6 +1,6 @@
 #!/bin/bash
 # Move React build files to Nginx's web root
-# mv /home/ec2-user/ui/dist /usr/share/nginx/html
+# sudo mv /home/ec2-user/ui/dist /usr/share/nginx/html
 
 # Write Nginx configuration
 cat <<'EOF' > /etc/nginx/conf.d/default.conf
