@@ -52,11 +52,16 @@ docker run -d --name flytrap_api_container -p 8000:8000 \
     266735799562.dkr.ecr.us-east-1.amazonaws.com/flytrap-api-repo:latest
 
 # Connect to the db_user and run schema.sql to setup tables
-docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${db_name}" < /app/schema.sql
+docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /app/schema.sql
 
 # Ensure ec2-user has the correct permissions for the cloned repositories
 sudo chown -R ec2-user:ec2-user /home/ec2-user/ui
 sudo chmod -R 755 /home/ec2-user/ui
+
+# Set permissions for node_modules before running npm install
+# This ensures ec2-user can create and write to node_modules
+sudo mkdir -p /home/ec2-user/ui/node_modules
+sudo chown -R ec2-user:ec2-user /home/ec2-user/ui/node_modules
 
 cd /home/ec2-user/ui
 

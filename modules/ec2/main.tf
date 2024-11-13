@@ -50,7 +50,18 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action    = "ec2-instance-connect:SendSSHPublicKey"
         Effect    = "Allow"
         Resource  = "arn:aws:ec2:${var.aws_region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
-      },
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "ecr_access_policy" {
+  name        = "EC2ECRAccessPolicy"
+  description = "Policy to allow EC2 instance to pull images from ECR"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
         Action    = [
           "ecr:GetAuthorizationToken",
@@ -59,7 +70,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
           "ecr:GetDownloadUrlForLayer"
         ]
         Effect    = "Allow"
-        Resource  = "arn:aws:ecr:us-east-1:266735799562:repository/flytrap-api-repo"
+        Resource  = "*"
       }
     ]
   })
@@ -68,6 +79,11 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
 resource "aws_iam_role_policy_attachment" "ec2_rds_policy_attachment" {
   role       = aws_iam_role.ec2_role.name
   policy_arn = aws_iam_policy.ec2_permissions_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_ecr_policy_attachment" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.ecr_access_policy.arn
 }
 
 resource "aws_security_group" "flytrap_app_sg" {
