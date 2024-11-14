@@ -5,7 +5,7 @@ output "vpc_id" {
 
 output "public_subnet_id" {
   description = "VPC public subnets IDs"
-  value       = [aws_subnet.public_a.id]
+  value       = aws_subnet.public_a.id
 }
 
 output "private_subnet_ids" {
@@ -19,6 +19,6 @@ output "private_subnet_cidrs" {
 }
 
 output "public_subnet_cidr" {
-  description = "VPC private subnet CIDR blocks"
+  description = "VPC private subnet CIDR block"
   value       = aws_subnet.public_a.cidr_block
 }

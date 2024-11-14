@@ -1,9 +1,8 @@
 #!/bin/bash
-# Move React build files to Nginx's web root
-# sudo mv /home/ec2-user/ui/dist /usr/share/nginx/html
 
-# Write Nginx configuration
-cat <<'EOF' > /etc/nginx/conf.d/default.conf
+sudo mv /home/ec2-user/ui/dist /usr/share/nginx/html
+
+$(cat <<EOF > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
     server_name _;
@@ -23,6 +22,6 @@ server {
     }
 }
 EOF
+)
 
-# Restart Nginx to apply changes
 sudo systemctl restart nginx

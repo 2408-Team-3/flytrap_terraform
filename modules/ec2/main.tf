@@ -25,7 +25,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action   = [
           "rds:DescribeDBInstances",
           "rds:Connect",
-          "rds:ExecuteStatement",
+         # "rds:ExecuteStatement",      # remove
         ]
         Effect   = "Allow"
         Resource = var.db_arn
@@ -158,7 +158,7 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 }
 
 locals {
-  setup_nginx_script    = file("${path.module}/scripts/setup_nginx.sh")
+  setup_nginx_script = file("${path.module}/scripts/setup_nginx.sh")
 }
 
 resource "aws_instance" "flytrap_app" {
@@ -168,7 +168,6 @@ resource "aws_instance" "flytrap_app" {
   security_groups             = [aws_security_group.flytrap_app_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
 
-  # for ssh
   associate_public_ip_address = true
   metadata_options {
     http_tokens = "required"
