@@ -28,11 +28,8 @@ echo "JWT Secret Key starts with: ${JWT_SECRET_KEY}" >> $LOG_FILE
 echo "AWS_REGION=${aws_region}" >> $LOG_FILE
 echo "USAGE_PLAN_ID=${api_gateway_usage_plan_id}" >> $LOG_FILE
 
-# Authenticate Docker to AWS ECR (this assumes the IAM role is correctly attached to the instance)
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 266735799562.dkr.ecr.us-east-1.amazonaws.com
-
-# Pull the latest Docker image for the API from ECR
-docker pull 266735799562.dkr.ecr.us-east-1.amazonaws.com/flytrap-api-repo:latest
+# Pull the latest Docker image for the API from public ECR
+docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
 # Start Docker container and pass the environment variables dynamically
 docker run -d --name flytrap_api_container -p 8000:8000 \
@@ -49,7 +46,7 @@ docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "SAMESITE=None" \
     -e "USAGE_PLAN_ID=${api_gateway_usage_plan_id}" \
     -e "AWS_REGION=${aws_region}" \
-    266735799562.dkr.ecr.us-east-1.amazonaws.com/flytrap-api-repo:latest
+    public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
 # Connect to the db_user and run schema.sql to setup tables
 docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /app/schema.sql
