@@ -5,7 +5,7 @@ variable "vpc_id" {
 
 variable "account_id" {
   description = "AWS account id"
-  type = string
+  type        = string
 }
 
 variable "public_subnet_id" {
@@ -38,7 +38,7 @@ variable "ami" {
   type        = string
 }
 
-variable "region" {
+variable "aws_region" {
   description = "AWS region - setting as env variable for db connection in Flask"
   type        = string
 }
@@ -56,4 +56,14 @@ variable "lambda_sg_id" {
 variable "db_host" {
   description = "Hostname for the Flytrap RDS database for psql"
   type        = string
+}
+
+variable "api_gateway_usage_plan_id" {
+  description = "API Gateway useage plan ID for API keys "
+  type = string
+}
+
+variable "JWT_SECRET_KEY" {
+  type    = string
+  default = "secret_key"
 }

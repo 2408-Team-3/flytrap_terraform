@@ -41,28 +41,29 @@ module "lambda_configure" {
   private_subnet_ids   = module.vpc.private_subnet_ids
 }
 
-module "ec2" {
-  source           = "./modules/ec2"
-  account_id       = data.aws_caller_identity.current.account_id
-  vpc_id           = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnet_id[0]
-  lambda_sg_id     = module.lambda_configure.lambda_sg_id
-  flytrap_db_sg_id = module.rds.flytrap_db_sg_id
-  db_arn           = module.rds.db_arn
-  db_host          = module.rds.db_host
-  db_name          = module.rds.db_name
-  db_secret_arn    = module.rds.db_secret_arn
-  db_secret_name   = module.rds.db_secret_name
-  region           = var.aws_region
-  ami              = var.ami
-}
-
 module "api_gateway" {
   source         = "./modules/api_gateway"
   region         = var.aws_region
   account_id     = data.aws_caller_identity.current.account_id
   sqs_queue_name = module.sqs_provision.sqs_queue_name
   sqs_queue_arn  = module.sqs_provision.sqs_queue_arn
+}
+
+module "ec2" {
+  source                    = "./modules/ec2"
+  account_id                = data.aws_caller_identity.current.account_id
+  vpc_id                    = module.vpc.vpc_id
+  public_subnet_id          = module.vpc.public_subnet_id[0]
+  lambda_sg_id              = module.lambda_configure.lambda_sg_id
+  flytrap_db_sg_id          = module.rds.flytrap_db_sg_id
+  db_arn                    = module.rds.db_arn
+  db_host                   = module.rds.db_host
+  db_name                   = module.rds.db_name
+  db_secret_arn             = module.rds.db_secret_arn
+  db_secret_name            = module.rds.db_secret_name
+  aws_region                = var.aws_region
+  ami                       = var.ami
+  api_gateway_usage_plan_id = module.api_gateway.api_gateway_usage_plan_id
 }
 
 module "sqs_configure" {

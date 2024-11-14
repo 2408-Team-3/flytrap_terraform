@@ -24,9 +24,9 @@ resource "aws_security_group" "flytrap_db_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = [
-      var.private_subnet_cidrs[0],  # Allow outbound to private subnets (labmda)
+      var.private_subnet_cidrs[0],
       var.private_subnet_cidrs[1],
-      var.public_subnet_cidr    # Allow outbound to public subnets (EC2)
+      var.public_subnet_cidr
     ]
   }
 }

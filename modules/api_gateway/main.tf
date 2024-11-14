@@ -42,14 +42,14 @@ resource "aws_api_gateway_resource" "api" {
 
 resource "aws_api_gateway_resource" "errors" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
+  parent_id   = aws_api_gateway_resource.api.id
   path_part   = var.errors_path
 }
 
-resource "aws_api_gateway_resource" "promises" {
+resource "aws_api_gateway_resource" "rejections" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.api.id  # Link to the parent resource
-  path_part   = var.promises_path
+  parent_id   = aws_api_gateway_resource.api.id
+  path_part   = var.rejections_path
 }
 
 resource "aws_api_gateway_model" "errors_request_model" {
@@ -59,7 +59,7 @@ resource "aws_api_gateway_model" "errors_request_model" {
   schema = jsonencode({
     type = "object"
       properties = {
-        LogData = {
+        data = {
           type = "object"
           properties = {
             error = {
@@ -78,7 +78,7 @@ resource "aws_api_gateway_model" "errors_request_model" {
           required = ["error", "handled", "timestamp", "project_id"]
         }
       }
-      required = ["LogData"]
+      required = ["data"]
   })
 }
 
@@ -89,14 +89,14 @@ resource "aws_api_gateway_request_validator" "errors_request_validator" {
   validate_request_parameters = false
 }
 
-resource "aws_api_gateway_model" "promises_request_model" {
+resource "aws_api_gateway_model" "rejections_request_model" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  name        = "PromisesPostRequestModel"
+  name        = "RejectionsPostRequestModel"
   content_type = "application/json"
   schema = jsonencode({
     type = "object"
     properties = {
-      LogData = {
+      data = {
         type = "object"
         properties = {
           value = {
@@ -114,13 +114,13 @@ resource "aws_api_gateway_model" "promises_request_model" {
         required = ["value", "handled", "timestamp", "project_id"]
       }
     }
-    required = ["LogData"]
+    required = ["data"]
   })
 }
 
-resource "aws_api_gateway_request_validator" "promises_request_validator" {
+resource "aws_api_gateway_request_validator" "rejections_request_validator" {
   rest_api_id                 = aws_api_gateway_rest_api.api.id
-  name                        = "PromisesPostRequestValidator"
+  name                        = "RejectionsPostRequestValidator"
   validate_request_body       = true
   validate_request_parameters = false
 }
@@ -129,7 +129,8 @@ resource "aws_api_gateway_method" "post_errors" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.errors.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
+  authorization = "NONE"
+  api_key_required = true
 
   request_models = {
     "application/json" = aws_api_gateway_model.errors_request_model.name
@@ -138,17 +139,18 @@ resource "aws_api_gateway_method" "post_errors" {
   request_validator_id = aws_api_gateway_request_validator.errors_request_validator.id
 }
 
-resource "aws_api_gateway_method" "post_promises" {
+resource "aws_api_gateway_method" "post_rejections" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.promises.id
+  resource_id   = aws_api_gateway_resource.rejections.id
   http_method   = "POST"
-  authorization = "NONE" # ("API_KEY") NONE allows SDKs to send requests without authentication tokens or IAM permissions
+  authorization = "NONE"
+  api_key_required = true
 
   request_models = {
-    "application/json" = aws_api_gateway_model.promises_request_model.name
+    "application/json" = aws_api_gateway_model.rejections_request_model.name
   }
 
-  request_validator_id = aws_api_gateway_request_validator.promises_request_validator.id
+  request_validator_id = aws_api_gateway_request_validator.rejections_request_validator.id
 }
 
 resource "aws_api_gateway_method_response" "errors_post_200_response" {
@@ -193,10 +195,10 @@ resource "aws_api_gateway_method_response" "errors_post_500_response" {
   }
 }
 
-resource "aws_api_gateway_method_response" "promises_post_200_response" {
+resource "aws_api_gateway_method_response" "rejections_post_200_response" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
+  resource_id = aws_api_gateway_resource.rejections.id
+  http_method = aws_api_gateway_method.post_rejections.http_method
   status_code = "200"
 
   response_parameters = {
@@ -207,10 +209,10 @@ resource "aws_api_gateway_method_response" "promises_post_200_response" {
   }
 }
 
-resource "aws_api_gateway_method_response" "promises_post_400_response" {
+resource "aws_api_gateway_method_response" "rejections_post_400_response" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
+  resource_id = aws_api_gateway_resource.rejections.id
+  http_method = aws_api_gateway_method.post_rejections.http_method
   status_code = "400"
 
   response_parameters = {
@@ -221,10 +223,10 @@ resource "aws_api_gateway_method_response" "promises_post_400_response" {
   }
 }
 
-resource "aws_api_gateway_method_response" "promises_post_500_response" {
+resource "aws_api_gateway_method_response" "rejections_post_500_response" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.promises.id
-  http_method = aws_api_gateway_method.post_promises.http_method
+  resource_id = aws_api_gateway_resource.rejections.id
+  http_method = aws_api_gateway_method.post_rejections.http_method
   status_code = "500"
 
   response_parameters = {
@@ -253,10 +255,10 @@ resource "aws_api_gateway_integration" "sqs_integration_errors" {
   }
 }
 
-resource "aws_api_gateway_integration" "sqs_integration_promises" {
+resource "aws_api_gateway_integration" "sqs_integration_rejections" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.promises.id
-  http_method             = aws_api_gateway_method.post_promises.http_method
+  resource_id             = aws_api_gateway_resource.rejections.id
+  http_method             = aws_api_gateway_method.post_rejections.http_method
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.region}:sqs:path/${var.account_id}/${var.sqs_queue_name}"
@@ -313,46 +315,46 @@ resource "aws_api_gateway_integration_response" "sqs_500_response_errors" {
   depends_on = [aws_api_gateway_integration.sqs_integration_errors]
 }
 
-resource "aws_api_gateway_integration_response" "sqs_200_response_promises" {
+resource "aws_api_gateway_integration_response" "sqs_200_response_rejections" {
   rest_api_id       = aws_api_gateway_rest_api.api.id
-  resource_id       = aws_api_gateway_resource.promises.id
-  http_method       = aws_api_gateway_method.post_promises.http_method
-  status_code       = aws_api_gateway_method_response.promises_post_200_response.status_code
+  resource_id       = aws_api_gateway_resource.rejections.id
+  http_method       = aws_api_gateway_method.post_rejections.http_method
+  status_code       = aws_api_gateway_method_response.rejections_post_200_response.status_code
   selection_pattern = "^2[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Successfully processed message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
+  depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
 }
 
-resource "aws_api_gateway_integration_response" "sqs_400_response_promises" {
+resource "aws_api_gateway_integration_response" "sqs_400_response_rejections" {
   rest_api_id       = aws_api_gateway_rest_api.api.id
-  resource_id       = aws_api_gateway_resource.promises.id
-  http_method       = aws_api_gateway_method.post_promises.http_method
-  status_code       = aws_api_gateway_method_response.promises_post_400_response.status_code
+  resource_id       = aws_api_gateway_resource.rejections.id
+  http_method       = aws_api_gateway_method.post_rejections.http_method
+  status_code       = aws_api_gateway_method_response.rejections_post_400_response.status_code
   selection_pattern = "^4[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Oversized or invalid request\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
+  depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
 }
 
-resource "aws_api_gateway_integration_response" "sqs_500_response_promises" {
+resource "aws_api_gateway_integration_response" "sqs_500_response_rejections" {
   rest_api_id       = aws_api_gateway_rest_api.api.id
-  resource_id       = aws_api_gateway_resource.promises.id
-  http_method       = aws_api_gateway_method.post_promises.http_method
-  status_code       = aws_api_gateway_method_response.promises_post_500_response.status_code
+  resource_id       = aws_api_gateway_resource.rejections.id
+  http_method       = aws_api_gateway_method.post_rejections.http_method
+  status_code       = aws_api_gateway_method_response.rejections_post_500_response.status_code
   selection_pattern = "^5[0-9][0-9]"
 
   response_templates = {
     "application/json" = "{\"message\": \"Internal server error while processing message\"}"
   }
 
-  depends_on = [aws_api_gateway_integration.sqs_integration_promises]
+  depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
@@ -360,9 +362,9 @@ resource "aws_api_gateway_deployment" "deployment" {
 
   depends_on = [
     aws_api_gateway_method.post_errors,
-    aws_api_gateway_method.post_promises,
+    aws_api_gateway_method.post_rejections,
     aws_api_gateway_integration.sqs_integration_errors,
-    aws_api_gateway_integration.sqs_integration_promises
+    aws_api_gateway_integration.sqs_integration_rejections
   ]
 }
 
@@ -370,4 +372,13 @@ resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = var.stage_name
+}
+
+resource "aws_api_gateway_usage_plan" "usage_plan" {
+  name = "flytrap_usage_plan"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.api.id
+    stage  = aws_api_gateway_stage.stage.stage_name
+  }
 }
