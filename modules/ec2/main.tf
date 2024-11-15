@@ -25,7 +25,6 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action   = [
           "rds:DescribeDBInstances",
           "rds:Connect",
-         # "rds:ExecuteStatement",      # remove
         ]
         Effect   = "Allow"
         Resource = var.db_arn
@@ -40,16 +39,27 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Resource = "*"
       },
       {
-        "Action": [
+        Action   = [
           "secretsmanager:GetSecretValue"
         ],
-        "Effect": "Allow",
-        "Resource": var.db_secret_arn
+        Effect   = "Allow",
+        Resource = var.db_secret_arn
       },
       {
-        Action    = "ec2-instance-connect:SendSSHPublicKey"
+        Action    = [
+          "ec2-instance-connect:SendSSHPublicKey"
+        ],
         Effect    = "Allow"
         Resource  = "arn:aws:ec2:${var.aws_region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
+      },
+      {
+        Action  = [
+          "apigateway:POST",
+          "apigateway:PUT",
+          "apigateway:DELETE"
+        ]
+        Effect   = "Allow",
+        Resource = "*"
       }
     ]
   })
