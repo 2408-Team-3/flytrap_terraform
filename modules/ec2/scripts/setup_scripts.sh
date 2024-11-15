@@ -55,11 +55,6 @@ docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${
 sudo chown -R ec2-user:ec2-user /home/ec2-user/ui
 sudo chmod -R 755 /home/ec2-user/ui
 
-# Set permissions for node_modules before running npm install
-# This ensures ec2-user can create and write to node_modules
-sudo mkdir -p /home/ec2-user/ui/node_modules
-sudo chown -R ec2-user:ec2-user /home/ec2-user/ui/node_modules
-
 cd /home/ec2-user/ui
 
 # Install UI dependencies and build the React app

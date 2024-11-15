@@ -14,6 +14,46 @@ resource "aws_iam_role" "ec2_role" {
   })
 }
 
+
+resource "aws_iam_policy" "ec2_permissions_policy" {
+  name        = "EC2PermissionsPolicy"
+  description = "Policy to allow EC2 instance to access RDS and CloudWatch"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = [
+          "rds:DescribeDBInstances",
+          "rds:Connect",
+          "rds:ExecuteStatement",
+        ]
+        Effect   = "Allow"
+        Resource = var.db_arn
+      },
+      {
+        Action   = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action    = "ec2-instance-connect:SendSSHPublicKey"
+        Effect    = "Allow"
+        Resource  = "arn:aws:ec2:${var.aws_region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_rds_policy_attachment" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.ecs_permissions_policy.arn
+}
+
 resource "aws_iam_policy" "ec2_permissions_policy" {
   name        = "EC2PermissionsPolicy"
   description = "Policy to allow EC2 instance to access RDS and CloudWatch"
@@ -41,10 +81,11 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
       },
       {
         "Action": [
-          "secretsmanager:GetSecretValue"
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:CreateSecret"
         ],
         "Effect": "Allow",
-        "Resource": var.db_secret_arn
+        "Resource": "*"
       },
       {
         Action    = "ec2-instance-connect:SendSSHPublicKey"
@@ -177,6 +218,7 @@ resource "aws_instance" "flytrap_app" {
 
   user_data = templatefile("${path.module}/scripts/setup_scripts.sh", {
     setup_nginx_script        = local.setup_nginx_script
+    db_secret_name            = var.db_secret_name
     db_host                   = var.db_host
     db_user                   = local.db_user
     db_name                   = var.db_name
