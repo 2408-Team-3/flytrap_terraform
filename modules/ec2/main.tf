@@ -40,10 +40,11 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
       },
       {
         Action   = [
-          "secretsmanager:GetSecretValue"
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:CreateSecret"
         ],
         Effect   = "Allow",
-        Resource = var.db_secret_arn
+        Resource = "*"
       },
       {
         Action    = [
@@ -72,8 +73,12 @@ resource "aws_iam_role_policy_attachment" "ec2_rds_policy_attachment" {
 
 resource "aws_security_group" "flytrap_app_sg" {
   name        = "allow_http_https"
-  description = "Allow HTTP, HTTPS and RDS inbound traffic"
+  description = "Allow EC2 permissions for HTTP, HTTPS, Lambda, RDS, RDS, SSH"
   vpc_id      = var.vpc_id
+
+  tags = {
+    Name = "Flytrap EC2 security group"
+  }
 
   ingress {
     from_port   = 80
@@ -82,7 +87,6 @@ resource "aws_security_group" "flytrap_app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow HTTP access from Lambda (via security group)
   ingress {
     from_port       = 80
     to_port         = 80
@@ -97,7 +101,6 @@ resource "aws_security_group" "flytrap_app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow HTTPS access from Lambda (via security group)
   ingress {
     from_port       = 443
     to_port         = 443
