@@ -24,8 +24,9 @@ aws secretsmanager create-secret \
     --secret-string "{"username":"${db_user}", "password":"${db_password}"}"
     --region "${aws_region}"
 
-docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
+docker pull public.ecr.aws/u3q8a7r6/flytrap_api/sns_branch:latest
 
+# To-do: remove the PGPASSWORD env variable
 docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "FLASK_APP=flytrap.py" \
     -e "FLASK_ENV=production" \
@@ -40,7 +41,7 @@ docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "SAMESITE=None" \
     -e "USAGE_PLAN_ID=${api_gateway_usage_plan_id}" \
     -e "AWS_REGION=${aws_region}" \
-    public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
+    public.ecr.aws/u3q8a7r6/flytrap_api/sns_branch:latest
 
 docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /app/schema.sql
 
@@ -53,6 +54,7 @@ cd /home/ec2-user/ui
 npm install
 echo "VITE_FLYTRAP_SDK_URL=${sdk_url}" > .env
 npm run build
+sudo mv dist /usr/share/nginx/html
 
 echo "${setup_nginx_script}" > /home/ec2-user/setup_nginx.sh
 chmod +x /home/ec2-user/setup_nginx.sh
