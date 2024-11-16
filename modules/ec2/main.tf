@@ -42,6 +42,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action   = [
           "secretsmanager:GetSecretValue",
           "secretsmanager:CreateSecret",
+          "secretsmanager:UpdateSecret"
         ],
         Effect   = "Allow",
         Resource = "*"
@@ -58,7 +59,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
           "apigateway:POST",
           "apigateway:PUT",
           "apigateway:DELETE"
-        ]
+        ],
         Effect   = "Allow",
         Resource = "*"
       },
@@ -71,7 +72,14 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
           "sns:Publish",
           "sns:ListTopics",
           "sns:ListSubscriptionsByTopic"
-        ]
+        ],
+        Effect    = "Allow",
+        Resource  = "*"
+      },
+       {
+        Action = "sts:GetCallerIdentity"
+        Effect = "Allow"
+        Resource = "*"
       }
     ]
   })
