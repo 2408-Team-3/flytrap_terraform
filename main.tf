@@ -64,6 +64,7 @@ module "ec2" {
   ami                       = var.ami
   api_gateway_usage_plan_id = module.api_gateway.api_gateway_usage_plan_id
   account_id                = data.aws_caller_identity.current.account_id
+  sdk_url                   = module.api_gateway.public_api_gateway_url
 }
 
 module "sqs_configure" {

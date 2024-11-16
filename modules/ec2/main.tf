@@ -193,6 +193,7 @@ resource "aws_instance" "flytrap_app" {
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
     aws_region                = var.aws_region
     JWT_SECRET_KEY            = var.JWT_SECRET_KEY
+    sdk_url                   = var.sdk_url
   })
 
   tags = {

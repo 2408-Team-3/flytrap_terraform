@@ -67,3 +67,8 @@ variable "JWT_SECRET_KEY" {
   type    = string
   default = "secret_key"
 }
+
+variable "sdk_url" {
+  description = "API Gateway base URL for SDKS"
+  type        = string
+}

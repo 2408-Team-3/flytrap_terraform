@@ -39,6 +39,7 @@ sudo chown -R ec2-user:ec2-user /home/ec2-user/ui/node_modules
 
 cd /home/ec2-user/ui
 npm install
+echo "VITE_FLYTRAP_SDK_URL=${sdk_url}" > .env
 npm run build
 
 echo "${setup_nginx_script}" > /home/ec2-user/setup_nginx.sh
