@@ -12,6 +12,17 @@ git clone -b production https://github.com/2408-Team-3/flytrap_ui.git ui
 # Generate JWT secret key (TODO: get from secrets manager)
 JWT_SECRET_KEY=$(openssl rand -hex 32)
 
+# Store the JWT_SECRET_KEY in AWS Secrets Manager
+aws secretsmanager create-secret --name flytrap/jwt_secret_key \
+    --description "JWT secret key for Flytrap application" \
+    --secret-string "${JWT_SECRET_KEY}" \
+    --region "${aws_region}"
+# Store PostgreSQL password in AWS Secrets Manager (if not already set)
+aws secretsmanager create-secret --name flytrap/pg_password \
+    --description "PostgreSQL password for Flytrap application" \
+    --secret-string "${db_password}" \
+    --region "${aws_region}"
+
 docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
 docker run -d --name flytrap_api_container -p 8000:8000 \
