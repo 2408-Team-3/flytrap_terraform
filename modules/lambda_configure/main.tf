@@ -51,7 +51,10 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "logs:StartQuery",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams"
         ]
         Effect = "Allow"
         Resource = "*"
