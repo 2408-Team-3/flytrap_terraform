@@ -18,9 +18,10 @@ aws secretsmanager create-secret --name flytrap/jwt_secret_key \
     --secret-string "${JWT_SECRET_KEY}" \
     --region "${aws_region}"
 # Store PostgreSQL password in AWS Secrets Manager (if not already set)
-aws secretsmanager create-secret --name flytrap/pg_password \
-    --description "PostgreSQL password for Flytrap application" \
-    --secret-string "${db_password}" \
+aws secretsmanager create-secret \
+    --name flytrap_db_credentials \
+    --description "Credentials for Flytrap database" \
+    --secret-string "{"username":"${db_user}", "password":"${db_password}"}"
     --region "${aws_region}"
 
 docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
