@@ -53,6 +53,7 @@ resource "aws_db_instance" "flytrap_db" {
   username               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
   password               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
   db_name                = var.db_name
+  identifier             = "flytrap_database"
   skip_final_snapshot    = true
 
   tags = {
