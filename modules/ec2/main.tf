@@ -40,10 +40,11 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
       },
       {
         Action   = [
-          "secretsmanager:GetSecretValue"
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:CreateSecret",
         ],
         Effect   = "Allow",
-        Resource = var.db_secret_arn
+        Resource = "*"
       },
       {
         Action    = [

@@ -21,7 +21,7 @@ aws secretsmanager create-secret --name flytrap/jwt_secret_key \
 aws secretsmanager create-secret \
     --name flytrap_db_credentials \
     --description "Credentials for Flytrap database" \
-    --secret-string "{"username":"${db_user}", "password":"${db_password}"}"
+    --secret-string "{\"username\":\"${db_user}\", \"password\":\"${db_password}\"}" \
     --region "${aws_region}"
 
 docker pull public.ecr.aws/u3q8a7r6/flytrap_api/sns_branch:latest
