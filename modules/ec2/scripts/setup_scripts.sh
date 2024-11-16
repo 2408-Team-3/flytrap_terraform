@@ -1,7 +1,7 @@
 #!/bin/bash
 
 yum update -y
-yum install -y nodejs npm postgresql16 git nginx docker
+yum install -y nodejs npm postgresql16 git nginx docker aws-cli
 service docker start
 usermod -aG docker ec2-user
 newgrp docker
@@ -26,7 +26,6 @@ aws secretsmanager create-secret \
 
 docker pull public.ecr.aws/u3q8a7r6/flytrap_api/sns_branch:latest
 
-# To-do: remove the PGPASSWORD env variable
 docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "FLASK_APP=flytrap.py" \
     -e "FLASK_ENV=production" \
@@ -37,7 +36,7 @@ docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "PGPORT=5432" \
     -e "JWT_SECRET_KEY=${JWT_SECRET_KEY}" \
     -e "HTTPONLY=True" \
-    -e "SECURE=True" \
+    -e "SECURE=False" \
     -e "SAMESITE=None" \
     -e "USAGE_PLAN_ID=${api_gateway_usage_plan_id}" \
     -e "AWS_REGION=${aws_region}" \
@@ -53,8 +52,7 @@ sudo chown -R ec2-user:ec2-user /home/ec2-user/ui/node_modules
 cd /home/ec2-user/ui
 npm install
 echo "VITE_FLYTRAP_SDK_URL=${sdk_url}" > .env
-npm run build
-sudo mv dist /usr/share/nginx/html
+# npm run build
 
 echo "${setup_nginx_script}" > /home/ec2-user/setup_nginx.sh
 chmod +x /home/ec2-user/setup_nginx.sh
