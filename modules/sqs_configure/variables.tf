@@ -8,11 +8,6 @@ variable "sqs_queue_arn" {
   type        = string
 }
 
-variable "sqs_queue_name" {
-  description = "The name of the SQS queue."
-  type        = string
-}
-
 variable "sqs_queue_id" {
   description = "The URL of the SQS queue."
   type        = string

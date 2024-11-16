@@ -12,6 +12,10 @@ resource "aws_security_group" "flytrap_db_sg" {
   description = "Allow access to the Flytrap database"
   vpc_id      = var.vpc_id
 
+  tags = {
+    Name = "allow_private_subnet_access_to_rds"
+  }
+
   ingress {
     from_port         = 5432
     to_port           = 5432
@@ -49,7 +53,7 @@ resource "aws_db_instance" "flytrap_db" {
   username               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["username"]
   password               = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
   db_name                = var.db_name
-  skip_final_snapshot    = true # change to false for production (makes a db backup)
+  skip_final_snapshot    = true
 
   tags = {
     Name = "flytrap-db"

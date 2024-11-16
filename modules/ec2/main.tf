@@ -25,7 +25,6 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action   = [
           "rds:DescribeDBInstances",
           "rds:Connect",
-          "rds:ExecuteStatement",
         ]
         Effect   = "Allow"
         Resource = var.db_arn
@@ -40,16 +39,27 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Resource = "*"
       },
       {
-        "Action": [
+        Action   = [
           "secretsmanager:GetSecretValue"
         ],
-        "Effect": "Allow",
-        "Resource": var.db_secret_arn
+        Effect   = "Allow",
+        Resource = var.db_secret_arn
       },
       {
-        Action    = "ec2-instance-connect:SendSSHPublicKey"
+        Action    = [
+          "ec2-instance-connect:SendSSHPublicKey"
+        ],
         Effect    = "Allow"
         Resource  = "arn:aws:ec2:${var.aws_region}:${var.account_id}:instance/${aws_instance.flytrap_app.id}"
+      },
+      {
+        Action  = [
+          "apigateway:POST",
+          "apigateway:PUT",
+          "apigateway:DELETE"
+        ]
+        Effect   = "Allow",
+        Resource = "*"
       }
     ]
   })
@@ -158,7 +168,7 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 }
 
 locals {
-  setup_nginx_script    = file("${path.module}/scripts/setup_nginx.sh")
+  setup_nginx_script = file("${path.module}/scripts/setup_nginx.sh")
 }
 
 resource "aws_instance" "flytrap_app" {
@@ -168,7 +178,6 @@ resource "aws_instance" "flytrap_app" {
   security_groups             = [aws_security_group.flytrap_app_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
 
-  # for ssh
   associate_public_ip_address = true
   metadata_options {
     http_tokens = "required"
@@ -184,6 +193,7 @@ resource "aws_instance" "flytrap_app" {
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
     aws_region                = var.aws_region
     JWT_SECRET_KEY            = var.JWT_SECRET_KEY
+    sdk_url                   = var.sdk_url
   })
 
   tags = {

@@ -51,9 +51,8 @@ module "api_gateway" {
 
 module "ec2" {
   source                    = "./modules/ec2"
-  account_id                = data.aws_caller_identity.current.account_id
   vpc_id                    = module.vpc.vpc_id
-  public_subnet_id          = module.vpc.public_subnet_id[0]
+  public_subnet_id          = module.vpc.public_subnet_id
   lambda_sg_id              = module.lambda_configure.lambda_sg_id
   flytrap_db_sg_id          = module.rds.flytrap_db_sg_id
   db_arn                    = module.rds.db_arn
@@ -64,13 +63,14 @@ module "ec2" {
   aws_region                = var.aws_region
   ami                       = var.ami
   api_gateway_usage_plan_id = module.api_gateway.api_gateway_usage_plan_id
+  account_id                = data.aws_caller_identity.current.account_id
+  sdk_url                   = module.api_gateway.public_api_gateway_url
 }
 
 module "sqs_configure" {
   source          = "./modules/sqs_configure"
   api_gateway_arn = module.api_gateway.api_gateway_execution_arn
   sqs_queue_arn   = module.sqs_provision.sqs_queue_arn
-  sqs_queue_name  = module.sqs_provision.sqs_queue_name
   sqs_queue_id    = module.sqs_provision.sqs_queue_id
 }
 
