@@ -42,7 +42,8 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action   = [
           "secretsmanager:GetSecretValue",
           "secretsmanager:CreateSecret",
-          "secretsmanager:UpdateSecret"
+          "secretsmanager:UpdateSecret",
+          "secretsmanager:DescribeSecret:
         ],
         Effect   = "Allow",
         Resource = "*"
@@ -214,6 +215,7 @@ resource "aws_instance" "flytrap_app" {
     aws_region                = var.aws_region
     JWT_SECRET_KEY            = var.JWT_SECRET_KEY
     sdk_url                   = var.sdk_url
+    aws_account_id            = var.aws_account_id
   })
 
   tags = {
