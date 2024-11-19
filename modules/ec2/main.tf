@@ -55,6 +55,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
       },
       {
         Action  = [
+          "apigateway:GET",
           "apigateway:POST",
           "apigateway:PUT",
           "apigateway:DELETE"
@@ -165,6 +166,33 @@ locals {
   db_password = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
 }
 
+data "aws_secretsmanager_secret" "flytrap_jwt_secret" {
+  name = "jwt_secret_key"
+}
+
+data "aws_secretsmanager_secret_version" "flytrap_jwt_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.flytrap_jwt_secret.id
+}
+
+locals {
+  jwt_secret_key = jsondecode(data.aws_secretsmanager_secret_version.flytrap_jwt_secret_version.secret_string)["jwt_secret_key"]
+}
+
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.*-x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "EC2InstanceProfileForRDSAccess"
   role = aws_iam_role.ec2_role.name
@@ -175,7 +203,7 @@ locals {
 }
 
 resource "aws_instance" "flytrap_app" {
-  ami                         = var.ami
+  ami                         = data.aws_ami.amazon_linux_2023.id
   instance_type               = "t2.micro"
   subnet_id                   = var.public_subnet_id
   security_groups             = [aws_security_group.flytrap_app_sg.id]
@@ -195,8 +223,8 @@ resource "aws_instance" "flytrap_app" {
     db_password               = local.db_password
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
     aws_region                = var.aws_region
-    JWT_SECRET_KEY            = var.JWT_SECRET_KEY
     sdk_url                   = var.sdk_url
+    jwt_secret_key            = local.jwt_secret_key
   })
 
   tags = {
