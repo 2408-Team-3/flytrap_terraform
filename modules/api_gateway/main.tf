@@ -276,7 +276,7 @@ resource "aws_api_gateway_integration" "sqs_integration_errors" {
   }
 
   request_templates = {
-    "application/json" = "Action=SendMessage&MessageBody=$input.body"
+    "application/json" = "Action=SendMessage&MessageBody=$util.urlEncode($input.body)"
   }
 }
 
