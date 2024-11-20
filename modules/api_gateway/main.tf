@@ -71,9 +71,27 @@ resource "aws_api_gateway_model" "errors_request_model" {
               }
               required = ["name", "message", "stack"]
             }
+            codeContexts = {
+              type  = "array"
+              items = {
+                type       = "object"
+                properties = {
+                  file    = { type = "string" }
+                  line    = { type = "integer" }
+                  column  = { type = "integer" }
+                  context = { type = "string" }
+                }
+              }
+            }
             handled = { type = "boolean" }
             timestamp = { type = "string", format = "date-time" }
             project_id = { type = "string" }
+            method      = { type = "string" }
+            path        = { type = "string" }
+            ip          = { type = "string" }
+            os          = { type = "string" }
+            browser     = { type = "string" }
+            runtime     = { type = "string" }
           }
           required = ["error", "handled", "timestamp", "project_id"]
         }
@@ -103,6 +121,7 @@ resource "aws_api_gateway_model" "rejections_request_model" {
             oneOf = [
               { type = "string" },
               { type = "number" },
+              { type = "boolean" },
               { type = "object" },
               { type = "null" }
             ]
@@ -110,6 +129,12 @@ resource "aws_api_gateway_model" "rejections_request_model" {
           handled = { type = "boolean" }
           timestamp = { type = "string", format = "date-time" }
           project_id = { type = "string" }
+          method     = { type = "string" }
+          path       = { type = "string" }
+          ip         = { type = "string" }
+          os         = { type = "string" }
+          browser    = { type = "string" }
+          runtime    = { type = "string" }
         }
         required = ["value", "handled", "timestamp", "project_id"]
       }
