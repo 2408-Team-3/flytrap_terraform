@@ -12,15 +12,13 @@ git clone -b prod https://github.com/2408-Team-3/flytrap_ui.git ui
 
 sudo docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
-sudo docker run -d --name flytrap_api_container -p 8000:8000 \
+sudo docker run -d --name flytrap_api_container --restart always -p 8000:8000 \
     -e "FLASK_APP=flytrap.py" \
     -e "FLASK_ENV=production" \
     -e "PGUSER=${db_user}" \
     -e "PGHOST=${db_host}" \
     -e "PGDATABASE=${db_name}" \
-    -e "PGPASSWORD=${db_password}" \
     -e "PGPORT=5432" \
-    -e "JWT_SECRET_KEY=${jwt_secret_key}" \
     -e "HTTPONLY=True" \
     -e "SECURE=True" \
     -e "SAMESITE=None" \
