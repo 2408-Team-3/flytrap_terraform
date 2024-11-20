@@ -63,7 +63,7 @@ variable "account_id" {
   type        = string
 }
 
-variable "JWT_SECRET_KEY" {
+variable "jwt_secret_key" {
   type    = string
   default = "secret_key"
 }

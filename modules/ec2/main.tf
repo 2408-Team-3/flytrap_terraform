@@ -214,7 +214,7 @@ resource "aws_instance" "flytrap_app" {
     db_password               = local.db_password
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
     aws_region                = var.aws_region
-    JWT_SECRET_KEY            = var.JWT_SECRET_KEY
+    jwt_secret_key            = var.jwt_secret_key
     sdk_url                   = var.sdk_url
   })
 
