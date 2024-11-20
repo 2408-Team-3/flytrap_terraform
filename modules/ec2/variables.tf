@@ -48,11 +48,6 @@ variable "aws_region" {
   type        = string
 }
 
-variable "ami" {
-  description = "Amazon Machine Image (AMI) for Amazon Linux"
-  type        = string
-}
-
 variable "api_gateway_usage_plan_id" {
   description = "API Gateway useage plan ID for API keys "
   type        = string
@@ -61,11 +56,6 @@ variable "api_gateway_usage_plan_id" {
 variable "account_id" {
   description = "The AWS account ID"
   type        = string
-}
-
-variable "JWT_SECRET_KEY" {
-  type    = string
-  default = "secret_key"
 }
 
 variable "sdk_url" {
