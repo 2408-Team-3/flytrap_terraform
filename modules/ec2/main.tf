@@ -43,7 +43,7 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
           "secretsmanager:GetSecretValue",
           "secretsmanager:CreateSecret",
           "secretsmanager:UpdateSecret",
-          "secretsmanager:DescribeSecret:
+          "secretsmanager:DescribeSecret"
         ],
         Effect   = "Allow",
         Resource = "*"
@@ -59,7 +59,8 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         Action  = [
           "apigateway:POST",
           "apigateway:PUT",
-          "apigateway:DELETE"
+          "apigateway:DELETE",
+          "apigateway:GET"
         ],
         Effect   = "Allow",
         Resource = "*"
@@ -194,7 +195,7 @@ locals {
 
 resource "aws_instance" "flytrap_app" {
   ami                         = var.ami
-  instance_type               = "t2.micro"
+  instance_type               = "t2.small"
   subnet_id                   = var.public_subnet_id
   security_groups             = [aws_security_group.flytrap_app_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
@@ -215,7 +216,6 @@ resource "aws_instance" "flytrap_app" {
     aws_region                = var.aws_region
     JWT_SECRET_KEY            = var.JWT_SECRET_KEY
     sdk_url                   = var.sdk_url
-    aws_account_id            = var.aws_account_id
   })
 
   tags = {

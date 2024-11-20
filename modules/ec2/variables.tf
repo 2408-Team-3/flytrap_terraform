@@ -72,8 +72,3 @@ variable "sdk_url" {
   description = "API Gateway base URL for SDKS"
   type        = string
 }
-
-variable "aws_account_id" {
-  type        = string
-  default     = ""
-}

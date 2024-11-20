@@ -14,6 +14,12 @@
         --description "Credentials for Flytrap database" \
         --secret-string '{"username":"dev_user", "password":"dev_password"}' \
         --region us-east-1
+
+    aws secretsmanager create-secret \
+        --name jwt_secret_key \
+        --description "Secret key for session token management" \
+        --secret-string 'dsaklfjklciutycb2762jf23' \
+        --region us-east-1  
     ```
 
 4. Update any `variables.tf` files as needed. Adjust the AWS region and any desired changes to the default CIDR blocks.
