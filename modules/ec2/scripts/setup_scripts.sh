@@ -8,11 +8,11 @@ sudo usermod -aG docker ec2-user
 newgrp docker
 
 cd /home/ec2-user
-git clone -b production https://github.com/2408-Team-3/flytrap_ui.git ui
+git clone -b prod https://github.com/2408-Team-3/flytrap_ui.git ui
 
 sudo docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
-sudo docker run -d --name flytrap_api_container -p 8000:8000 \
+sudo docker run -d --name flytrap_api_container --restart always -p 8000:8000 \
     -e "FLASK_APP=flytrap.py" \
     -e "FLASK_ENV=production" \
     -e "PGUSER=${db_user}" \
@@ -20,7 +20,6 @@ sudo docker run -d --name flytrap_api_container -p 8000:8000 \
     -e "PGDATABASE=${db_name}" \
     -e "PGPASSWORD=${db_password}" \
     -e "PGPORT=5432" \
-    -e "JWT_SECRET_KEY=${jwt_secret_key}" \
     -e "HTTPONLY=True" \
     -e "SECURE=True" \
     -e "SAMESITE=None" \
