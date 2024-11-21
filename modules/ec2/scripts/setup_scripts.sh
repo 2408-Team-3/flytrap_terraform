@@ -18,6 +18,7 @@ sudo docker run -d --name flytrap_api_container --restart always -p 8000:8000 \
     -e "PGUSER=${db_user}" \
     -e "PGHOST=${db_host}" \
     -e "PGDATABASE=${db_name}" \
+    -e "PGPASSWORD=${db_password}" \
     -e "PGPORT=5432" \
     -e "HTTPONLY=True" \
     -e "SECURE=True" \
@@ -26,7 +27,7 @@ sudo docker run -d --name flytrap_api_container --restart always -p 8000:8000 \
     -e "AWS_REGION=${aws_region}" \
     public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 
-sudo docker exec -i flytrap_api_container PGPASSWORD="${db_password}" psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /app/schema.sql
+sudo docker exec -i flytrap_api_container psql -h "${db_host}" -U "${db_user}" -d "${db_name}" -f /app/schema.sql
 
 echo "VITE_FLYTRAP_SDK_URL=${sdk_url}" >> /home/ec2-user/ui/.env
 
