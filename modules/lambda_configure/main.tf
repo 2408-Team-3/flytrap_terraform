@@ -57,6 +57,17 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         Resource = "*"
       },
       {
+        Action = [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::${var.s3_bucket_name}",
+          "arn:aws:s3:::${var.s3_bucket_name}/*"
+        ]
+      },
+      {
         Action   = [
           "ec2:CreateNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
