@@ -74,11 +74,11 @@ resource "aws_api_gateway_model" "errors_request_model" {
             codeContexts = {
               type  = "array"
               items = {
-                type       = "object"
+                type = "object"
                 properties = {
-                  file    = { type = "string" }
-                  line    = { type = "integer" }
-                  column  = { type = "integer" }
+                  file = { type = "string" }
+                  line = { type = "integer" }
+                  column = { type = "integer" }
                   context = { type = "string" }
                 }
               }
@@ -86,12 +86,42 @@ resource "aws_api_gateway_model" "errors_request_model" {
             handled = { type = "boolean" }
             timestamp = { type = "string", format = "date-time" }
             project_id = { type = "string" }
-            method      = { type = "string" }
-            path        = { type = "string" }
-            ip          = { type = "string" }
-            os          = { type = "string" }
-            browser     = { type = "string" }
-            runtime     = { type = "string" }
+            method = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            path = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            ip = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            os = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            browser = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            runtime = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
           }
           required = ["error", "handled", "timestamp", "project_id"]
         }
@@ -129,12 +159,42 @@ resource "aws_api_gateway_model" "rejections_request_model" {
           handled = { type = "boolean" }
           timestamp = { type = "string", format = "date-time" }
           project_id = { type = "string" }
-          method     = { type = "string" }
-          path       = { type = "string" }
-          ip         = { type = "string" }
-          os         = { type = "string" }
-          browser    = { type = "string" }
-          runtime    = { type = "string" }
+          method = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          path = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          ip = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          os = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          browser = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          runtime = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
         }
         required = ["value", "handled", "timestamp", "project_id"]
       }
