@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "bucket_name" {
-  description = "Name for the Flytrap S3 sourcemaps bucket"
+  description = "Base name for the Flytrap S3 sourcemaps bucket"
   type        = string
   default     = "flytrap-sourcemaps-bucket"
 }

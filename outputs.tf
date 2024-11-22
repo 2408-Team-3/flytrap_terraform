@@ -17,3 +17,8 @@ output "flytrap_app_public_ip_for_DNS" {
   value       = module.ec2.flytrap_app_public_ip_for_DNS
   description = "The public IP address of the Flytrap application EC2 instance"
 }
+
+output "flytrap_bucket_name" {
+  value       = local.full_bucket_name
+  description = "The name of the Flytrap S3 bucket for storing sourcemaps"
+}
