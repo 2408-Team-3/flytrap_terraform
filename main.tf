@@ -25,6 +25,7 @@ locals {
 
 module "vpc" {
   source = "./modules/vpc"
+  region = var.aws_region
 }
 
 module "rds" {
