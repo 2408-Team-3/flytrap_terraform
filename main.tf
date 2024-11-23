@@ -94,6 +94,7 @@ module "lambda" {
   sqs_queue_arn       = module.sqs_provision.sqs_queue_arn
   ec2_url             = module.ec2.ec2_url
   s3_bucket_name      = local.full_bucket_name
+  region              = var.aws_region
 }
 
 module "update_security_group_rules" {

@@ -17,7 +17,7 @@ resource "aws_lambda_function" "flytrap_lambda" {
   handler       = var.lambda_handler
   runtime       = var.lambda_runtime
   filename      = "${path.root}/lib/flytrap_error_processor.zip"
-  timeout       = 30
+  timeout       = 300
 
   environment {
     variables = {
@@ -28,6 +28,7 @@ resource "aws_lambda_function" "flytrap_lambda" {
       PGPASSWORD       = local.db_password
       WEBHOOK_ENDPOINT = var.ec2_url
       S3_BUCKET_NAME   = var.s3_bucket_name
+      REGION           = var.region
     }
   }
 
