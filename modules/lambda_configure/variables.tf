@@ -33,3 +33,8 @@ variable "private_subnet_ids" {
   description = "VPC private subnet IDs"
   type        = list(string)
 }
+
+variable "s3_bucket_name" {
+  description = "Name of the S3 bucket"
+  type        = string
+}

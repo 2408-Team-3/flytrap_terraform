@@ -74,11 +74,11 @@ resource "aws_api_gateway_model" "errors_request_model" {
             codeContexts = {
               type  = "array"
               items = {
-                type       = "object"
+                type = "object"
                 properties = {
-                  file    = { type = "string" }
-                  line    = { type = "integer" }
-                  column  = { type = "integer" }
+                  file = { type = "string" }
+                  line = { type = "integer" }
+                  column = { type = "integer" }
                   context = { type = "string" }
                 }
               }
@@ -86,12 +86,42 @@ resource "aws_api_gateway_model" "errors_request_model" {
             handled = { type = "boolean" }
             timestamp = { type = "string", format = "date-time" }
             project_id = { type = "string" }
-            method      = { type = "string" }
-            path        = { type = "string" }
-            ip          = { type = "string" }
-            os          = { type = "string" }
-            browser     = { type = "string" }
-            runtime     = { type = "string" }
+            method = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            path = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            ip = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            os = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            browser = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
+            runtime = {
+              oneOf = [
+                { type = "string" },
+                { type = "null" }
+              ]
+            }
           }
           required = ["error", "handled", "timestamp", "project_id"]
         }
@@ -129,12 +159,42 @@ resource "aws_api_gateway_model" "rejections_request_model" {
           handled = { type = "boolean" }
           timestamp = { type = "string", format = "date-time" }
           project_id = { type = "string" }
-          method     = { type = "string" }
-          path       = { type = "string" }
-          ip         = { type = "string" }
-          os         = { type = "string" }
-          browser    = { type = "string" }
-          runtime    = { type = "string" }
+          method = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          path = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          ip = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          os = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          browser = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
+          runtime = {
+            oneOf = [
+              { type = "string" },
+              { type = "null" }
+            ]
+          }
         }
         required = ["value", "handled", "timestamp", "project_id"]
       }
@@ -148,6 +208,30 @@ resource "aws_api_gateway_request_validator" "rejections_request_validator" {
   name                        = "RejectionsPostRequestValidator"
   validate_request_body       = true
   validate_request_parameters = false
+}
+
+resource "aws_api_gateway_method" "options_parent" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.api.id  # Parent resource (e.g., /api)
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+  api_key_required = false
+}
+
+resource "aws_api_gateway_method" "options_errors" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.errors.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+  api_key_required = false
+}
+
+resource "aws_api_gateway_method" "options_rejections" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.rejections.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+  api_key_required = false
 }
 
 resource "aws_api_gateway_method" "post_errors" {
@@ -176,6 +260,57 @@ resource "aws_api_gateway_method" "post_rejections" {
   }
 
   request_validator_id = aws_api_gateway_request_validator.rejections_request_validator.id
+}
+
+resource "aws_api_gateway_method_response" "options_parent_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.api.id
+  http_method = aws_api_gateway_method.options_parent.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_method_response" "options_errors_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.options_errors.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_method_response" "options_rejections_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.rejections.id
+  http_method = aws_api_gateway_method.options_rejections.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+  }
+
+  response_models = {
+    "application/json" = "Empty"
+  }
 }
 
 resource "aws_api_gateway_method_response" "errors_post_200_response" {
@@ -262,6 +397,54 @@ resource "aws_api_gateway_method_response" "rejections_post_500_response" {
   }
 }
 
+resource "aws_api_gateway_integration" "options_parent_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.api.id
+  http_method             = aws_api_gateway_method.options_parent.http_method
+  integration_http_method = "OPTIONS"
+  type                    = "MOCK"
+
+  request_templates = {
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
+  }
+}
+
+resource "aws_api_gateway_integration" "options_errors_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.errors.id
+  http_method             = aws_api_gateway_method.options_errors.http_method
+  integration_http_method = "OPTIONS"
+  type                    = "MOCK"
+
+  request_templates = {
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
+  }
+}
+
+resource "aws_api_gateway_integration" "options_rejections_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.rejections.id
+  http_method             = aws_api_gateway_method.options_rejections.http_method
+  integration_http_method = "OPTIONS"
+  type                    = "MOCK"
+
+  request_templates = {
+    "application/json" = jsonencode(
+      {
+        statusCode = 200
+      }
+    )
+  }
+}
+
 resource "aws_api_gateway_integration" "sqs_integration_errors" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.errors.id
@@ -298,6 +481,51 @@ resource "aws_api_gateway_integration" "sqs_integration_rejections" {
   }
 }
 
+resource "aws_api_gateway_integration_response" "options_parent_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.api.id
+  http_method = aws_api_gateway_method.options_parent.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
+  depends_on = [aws_api_gateway_integration.options_parent_integration]
+}
+
+resource "aws_api_gateway_integration_response" "options_errors_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.errors.id
+  http_method = aws_api_gateway_method.options_errors.http_method
+  status_code = aws_api_gateway_method_response.options_errors_response.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
+  depends_on = [aws_api_gateway_integration.options_errors_integration]
+}
+
+resource "aws_api_gateway_integration_response" "options_rejections_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.rejections.id
+  http_method = aws_api_gateway_method.options_rejections.http_method
+  status_code = aws_api_gateway_method_response.options_rejections_response.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
+  depends_on = [aws_api_gateway_integration.options_rejections_integration]
+}
+
 resource "aws_api_gateway_integration_response" "sqs_200_response_errors" {
   rest_api_id       = aws_api_gateway_rest_api.api.id
   resource_id       = aws_api_gateway_resource.errors.id
@@ -307,6 +535,12 @@ resource "aws_api_gateway_integration_response" "sqs_200_response_errors" {
 
   response_templates = {
     "application/json" = "{\"message\": \"Successfully processed message\"}"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
   }
 
   depends_on = [aws_api_gateway_integration.sqs_integration_errors]
@@ -323,6 +557,12 @@ resource "aws_api_gateway_integration_response" "sqs_400_response_errors" {
     "application/json" = "{\"message\": \"Oversized or invalid request\"}"
   }
 
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
   depends_on = [aws_api_gateway_integration.sqs_integration_errors]
 }
 
@@ -335,6 +575,12 @@ resource "aws_api_gateway_integration_response" "sqs_500_response_errors" {
 
   response_templates = {
     "application/json" = "{\"message\": \"Internal server error while processing message\"}"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
   }
 
   depends_on = [aws_api_gateway_integration.sqs_integration_errors]
@@ -351,6 +597,12 @@ resource "aws_api_gateway_integration_response" "sqs_200_response_rejections" {
     "application/json" = "{\"message\": \"Successfully processed message\"}"
   }
 
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
   depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
 }
 
@@ -363,6 +615,12 @@ resource "aws_api_gateway_integration_response" "sqs_400_response_rejections" {
 
   response_templates = {
     "application/json" = "{\"message\": \"Oversized or invalid request\"}"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
   }
 
   depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
@@ -379,6 +637,12 @@ resource "aws_api_gateway_integration_response" "sqs_500_response_rejections" {
     "application/json" = "{\"message\": \"Internal server error while processing message\"}"
   }
 
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET, POST, OPTIONS'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, X-Amz-Date, X-Amz-Security-Token, Authorization, X-Api-Key, X-Requested-With, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Headers'"
+  }
+
   depends_on = [aws_api_gateway_integration.sqs_integration_rejections]
 }
 
@@ -386,8 +650,14 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
   depends_on = [
+    aws_api_gateway_method.options_parent,
+    aws_api_gateway_method.options_errors,
+    aws_api_gateway_method.options_rejections,
     aws_api_gateway_method.post_errors,
     aws_api_gateway_method.post_rejections,
+    aws_api_gateway_integration.options_parent_integration,
+    aws_api_gateway_integration.options_errors_integration,
+    aws_api_gateway_integration.options_rejections_integration,
     aws_api_gateway_integration.sqs_integration_errors,
     aws_api_gateway_integration.sqs_integration_rejections
   ]

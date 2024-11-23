@@ -15,8 +15,17 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
+locals {
+  full_bucket_name = "${var.bucket_name}-${random_id.bucket_suffix.hex}"
+}
+
 module "vpc" {
   source = "./modules/vpc"
+  region = var.aws_region
 }
 
 module "rds" {
@@ -39,6 +48,7 @@ module "lambda_configure" {
   db_instance_arn      = module.rds.db_arn
   private_subnet_cidrs = module.vpc.private_subnet_cidrs
   private_subnet_ids   = module.vpc.private_subnet_ids
+  s3_bucket_name       = local.full_bucket_name
 }
 
 module "api_gateway" {
@@ -84,6 +94,8 @@ module "lambda" {
   private_subnet_ids  = module.vpc.private_subnet_ids
   sqs_queue_arn       = module.sqs_provision.sqs_queue_arn
   ec2_url             = module.ec2.ec2_url
+  s3_bucket_name      = local.full_bucket_name
+  region              = var.aws_region
 }
 
 module "update_security_group_rules" {
@@ -91,4 +103,11 @@ module "update_security_group_rules" {
   rds_security_group_id    = module.rds.rds_security_group_id
   ec2_security_group_id    = module.ec2.ec2_security_group_id
   lambda_security_group_id = module.lambda_configure.lambda_sg_id
+}
+
+module "s3" {
+  source              = "./modules/s3"
+  bucket_name         = local.full_bucket_name
+  lambda_iam_role_arn = module.lambda_configure.lambda_iam_role_arn
+  current_user_arn    = data.aws_caller_identity.current.arn
 }

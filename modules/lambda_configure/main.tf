@@ -57,6 +57,17 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         Resource = "*"
       },
       {
+        Action = [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::${var.s3_bucket_name}",
+          "arn:aws:s3:::${var.s3_bucket_name}/*"
+        ]
+      },
+      {
         Action   = [
           "ec2:CreateNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
@@ -93,7 +104,7 @@ resource "aws_security_group" "lambda_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = var.private_subnet_cidrs
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
