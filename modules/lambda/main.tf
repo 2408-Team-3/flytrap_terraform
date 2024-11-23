@@ -17,7 +17,7 @@ resource "aws_lambda_function" "flytrap_lambda" {
   handler       = var.lambda_handler
   runtime       = var.lambda_runtime
   filename      = "${path.root}/lib/flytrap_error_processor.zip"
-  timeout       = 300
+  timeout       = 180
 
   environment {
     variables = {
