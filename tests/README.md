@@ -3,7 +3,7 @@
 Flytrap uses Artillery for basic load testing.
 
 Load testing tools are traditionally used to test API endpoints. However, Flytrap SDKs capture
-error data and send them to an AWS API Gateway. Since API Gatway is desigend to scale generously,
+error data and send them to an AWS API Gateway. Since API Gatway is designed to scale generously,
 we utilized Artillery to simulate end-to-end testing of the AWS infrastructure.
 
 Running Artillery load tests allowed us to identify performance bottlenecks and optimize system
@@ -22,7 +22,7 @@ configured with a rate limit of 20 RPS and a burst limit of 80 to ensure fronten
 manage traffic spikes.
 
 -Users can opt to upgrade EC2 instance size and API Gateway rate limiting (via Terraform or the
-AWS console) to handle a great number of requests per second. This would increase the accuracy of
+AWS console) to handle a greater number of requests per second. This would increase the accuracy of
 dashboard insights in areas like error count and affected user count. However, this does not
 resolve the React re-rendering issue caused by traffic exceeding 20 RPS. The tradeoff here is
 more accurate data collection, but a slow or temporarily unavailable dashboard during high-frequency
@@ -36,9 +36,10 @@ bursts of incoming error data.
    ```
 
 2. **Prepare the Test**:
-   Navigate into the `tests` directory in the flytrap_terraform folder. The provided test runs
-   against the API Gateway's `/errors` endpoint. The test file includes a mock request body formatted
-   and encoded to pass the API Gateway model validation for that route.
+   Navigate into the `tests` directory in the flytrap_terraform folder.
+   The provided test runs against the API Gateway's `/errors` endpoint.
+   The test file includes a mock request body formatted and encoded to pass the API Gateway model
+   validation for that route.
 
 3. **Update Configuration**:
    - Running an Artillery test requires a deployed Flytrap AWS architecture and a test project.
