@@ -212,7 +212,7 @@ resource "aws_api_gateway_request_validator" "rejections_request_validator" {
 
 resource "aws_api_gateway_method" "options_parent" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.api.id  # Parent resource (e.g., /api)
+  resource_id   = aws_api_gateway_resource.api.id
   http_method   = "OPTIONS"
   authorization = "NONE"
   api_key_required = false
