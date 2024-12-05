@@ -1,0 +1,35 @@
+config:
+  target: 'https://cd61789ppb.execute-api.us-east-1.amazonaws.com/prod' # replace with current API Gateway endpoint
+  phases:
+    - duration: 60       # Test duration in seconds
+      arrivalRate: 20    # Requests per second
+scenarios:
+  - flow:
+      - post:
+          url: '/api/errors'
+          headers:
+            x-api-key: '975d895c-6aaa-4423-94c8-33e58ccea608' # replace with current api key
+          json:
+            data:
+              error:
+                name: "ErrorType"
+                message: "This is an error message"
+                stack: "Error stack trace"
+              codeContexts:
+                - file: "app.js"
+                  line: 23
+                  column: 15
+                  context: "[\"console.log(error)\"]"
+                - file: "index.js"
+                  line: 42
+                  column: 7
+                  context: "[\"return response\"]"
+              handled: false
+              timestamp: "2024-12-04T10:00:00Z"
+              project_id: "8585ef3c-2861-4f45-8e9b-1fce9ad589ae" # replace with current project id
+              method: "POST"
+              path: "/api/errors"
+              ip: "192.168.1.1"
+              os: "Windows 10"
+              browser: "Chrome"
+              runtime: "Node.js 18"

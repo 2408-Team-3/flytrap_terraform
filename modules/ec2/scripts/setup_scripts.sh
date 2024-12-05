@@ -8,7 +8,7 @@ sudo usermod -aG docker ec2-user
 newgrp docker
 
 cd /home/ec2-user
-git clone -b prod https://github.com/2408-Team-3/flytrap_ui.git ui
+git clone https://github.com/2408-Team-3/flytrap_ui.git ui
 
 sudo docker pull public.ecr.aws/f4k2o6f2/flytrap-api-public:latest
 

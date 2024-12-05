@@ -62,6 +62,17 @@ resource "aws_iam_policy" "ec2_permissions_policy" {
         ]
         Effect   = "Allow",
         Resource = "*"
+      },
+      {
+        Action = [
+          "sns:CreateTopic",
+          "sns:Subscribe",
+          "sns:Unsubscribe",
+          "sns:DeleteTopic",
+          "sns:Publish"
+        ],
+        Effect    = "Allow",
+        Resource  = "*"
       }
     ]
   })
