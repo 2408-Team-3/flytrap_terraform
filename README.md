@@ -1,7 +1,7 @@
 ![Organization Logo](https://raw.githubusercontent.com/getflytrap/.github/main/profile/flytrap_logo.png)
 
 # Flytrap Terraform Installation Guide
-The Flytrap Terraform Repository provides everything you need to set up Flytrap in a production environment. Using Terraform, you can deploy the required AWS infrastructure, including the API, processor, database, and all related services, ensuring Flytrap is fully operational in your cloud environment.
+The Flytrap Terraform repository provides everything you need to set up Flytrap in a production environment. Using Terraform, you can deploy the required AWS infrastructure, including the API, processor, database, and all related services, ensuring Flytrap is fully operational in your cloud environment.
 
 This guide will walk you through provisioning Flytrap's architecture using Terraform.
 
@@ -68,9 +68,9 @@ The Flytrap architecture manages the flow of error data from capture to resoluti
 - **Amazon SQS:** Decouple ingestion and processing by queuing error messages for efficient handling.
 - **AWS Lambda:** Process error payloads, unminify stack traces using S3 source maps, and store data in the database.
 - **Amazon RDS:** Set up a PostgreSQL database as the central repository for structured error and project data.
-- **Amazon SNS:** Enable real-time notifications for developers when new errors are detected.
 - **S3 Bucket:** Store source maps securely for error trace resolution.
-- **Amazon EC2:** Hosts the React-based dashboard and the Flytrap API, enabling developers to manage errors and projects.
+- **Amazon EC2:** Host the React-based dashboard and the Flytrap API, enabling developers to manage errors and projects.
+- **VPC:** Create a Virtual Private Cloud (VPC) to isolate and secure resources, ensuring network-level control and protection for all Flytrap services.
 
 ### 🎯 Post-Provisioning Outputs
 After Terraform completes the setup, it will generate several outputs critical for accessing and managing Flytrap:
@@ -82,7 +82,7 @@ After Terraform completes the setup, it will generate several outputs critical f
 - **`default_admin_password_dashboard_login`:** The default admin password for the Flytrap dashboard. Replace this immediately after the first login for security.
 
 ### 🔧 Post-Deployment Steps
-1. **Configure DNS:** If desired, sssociate the `flytrap_app_public_ip_for_DNS` with a custom domain name using any DNS provider (e.g., AWS Route 53, GoDaddy, Cloudflare). This will simplify the accessing the Flytrap application.  
+1. **Configure DNS:** If desired, associate the `flytrap_app_public_ip_for_DNS` with a custom domain name using any DNS provider (e.g., AWS Route 53, GoDaddy, Cloudflare). This will simplify accessing the Flytrap application.  
 
     - Create an A record pointing to the public IP address (`flytrap_app_public_ip_for_DNS`).
     - For subdomains, create CNAME records pointing to the root domain or other destinations.  
@@ -108,6 +108,8 @@ To make changes to the infrastructure, update the main.tf file or relevant confi
 terraform apply -var="aws_region=us-east-1"
 ```
 - Replace `us-east-1` with your AWS region.
+
+Flytrap strives to be cost-effective by provisioning resources with default sizes, such as an RDS instance of `t3.micro` and an EC2 instance of `t2.small`. These configurations are suitable for small-scale applications and testing environments but can be increased as needed based on your application's size and the anticipated volume of errors. If you expect high traffic or frequent error logging, consider scaling up the RDS or EC2 instance types.
 
 ### Destroying the Infrastructure
 To remove the Flytrap infrastructure from your AWS account, run:
