@@ -7,6 +7,8 @@ This guide will walk you through provisioning Flytrap's architecture using Terra
 
 To learn more about Flytrap, check out our [case study](https://getflytrap.github.io/).
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## 🚀 Getting Started
 To deploy Flytrap in your AWS account, follow these steps:
 
