@@ -94,26 +94,26 @@ After Terraform completes the setup, it will generate several outputs critical f
 
 ### Admin Console
 
-1. **Log in to the Admin Console:** Visit the Flytrap client dashboard url in the browser (or use your custom domain if you've configured DNS). Log in
-using the default admin email and password provided in the command line Terraform outputs. Select Change Password to update your default admin email and password.
+1. **Log in to the Admin Console:** Visit the Flytrap client dashboard URL in the browser (or use your custom domain if you've configured DNS). Log in
+using the default admin email and password provided in the Terraform command line outputs. Select Change Password to update your default admin email and password.
 
 ![loginPage](https://github.com/getflytrap/.github/blob/main/profile/loginPage.png)
 
 2. **Create Projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
-Vanilla Js, Express, Flask).
+Vanilla JS, Express, Flask).
 
 ![createProject](https://github.com/getflytrap/.github/blob/main/profile/projectSetup.png)
 
 3. **Follow SDK Setup Instructions:** The admin console provides detailed installation instructions for each SDK.
    - The React and Express SDKs are available as npm packages.
    - The Flask SDK is available as a PyPi package.
-   - The Vanilla JS SDK is installed by adding a script tag to your existing application.
+   - The Vanilla JS SDK is installed by adding a `<script>` tag to your existing application.
 
 You'll be provided with a code snippet for initializing the Flytrap SDK in your application. You can also choose to manually add Flytrap's `captureException` method to your application as needed to catch data about handled errors (e.g., inside a try/catch block).
 
 ![sdkSetup](https://github.com/getflytrap/.github/blob/main/profile/reactSDKInstructions.png)
 
-4. **Add Users to Projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You'll be prompted to add users, and you can then assign those users to your projects. Users only have access to error data for the
+4. **Add Users to Projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You’ll be prompted to add users, who can then be assigned to specific projects. Users only have access to error data for the
 projects they are assigned to.
 
 ![manageUsers](https://github.com/getflytrap/.github/blob/main/profile/adminConsole.png)
@@ -127,8 +127,8 @@ projects they are assigned to.
 ![projectsDashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
 
 2. **View and Filter Errors:** Developers can view all project errors on the Issues page and use the filtering tools to focus on:
-   - Handled vs unhandled errors
-   - Resolved vs unresolved errors
+   - Handled versus unhandled errors
+   - Resolved versus unresolved errors
    - Time periods
 
     This helps prioritize fixes for issues with the greatest user impact or urgency.
@@ -151,7 +151,7 @@ projects they are assigned to.
 
    The interface is designed to streamline error resolution and ensure a smooth workflow.
 
-5. **Monitor User Impact:** Flytrap tracks how many users are affected by each error. This data provides actionable insights for prioritizing fixes, allowing developers to focus on high-impact issues first.
+5. **Monitor User Impact:** Flytrap tracks the number of users affected by each error. This data provides actionable insights for prioritizing fixes, allowing developers to focus on high-impact issues first.
 
 6. **Iterate and Improve:** Use Flytrap to continuously monitor your applications for new issues and ensure errors are resolved promptly. The dashboard’s intuitive interface minimizes distractions, allowing teams to focus on improving the user experience.
 
