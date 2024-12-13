@@ -97,12 +97,14 @@ After Terraform completes the setup, it will generate several outputs critical f
 1. **Log in to the Admin Console:** Visit the Flytrap client dashboard URL in the browser (or use your custom domain if you've configured DNS). Log in
 using the default admin email and password provided in the Terraform command line outputs. Select Change Password to update your default admin email and password.
 
-![loginPage](https://github.com/getflytrap/.github/blob/main/profile/loginPage.png)
+![Login page](https://github.com/getflytrap/.github/blob/main/profile/loginPage.png)
+*Flytrap Login Page*
 
 2. **Create Projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
 Vanilla JS, Express, Flask).
 
-![createProject](https://github.com/getflytrap/.github/blob/main/profile/projectSetup.png)
+![Create project page](https://github.com/getflytrap/.github/blob/main/profile/projectSetup.png)
+*Create a New Flytrap Project*
 
 3. **Follow SDK Setup Instructions:** The admin console provides detailed installation instructions for each SDK.
    - The React and Express SDKs are available as npm packages.
@@ -111,12 +113,14 @@ Vanilla JS, Express, Flask).
 
 You'll be provided with a code snippet for initializing the Flytrap SDK in your application. You can also choose to manually add Flytrap's `captureException` method to your application as needed to catch data about handled errors (e.g., inside a try/catch block).
 
-![sdkSetup](https://github.com/getflytrap/.github/blob/main/profile/reactSDKInstructions.png)
+![SDK setup page](https://github.com/getflytrap/.github/blob/main/profile/reactSDKInstructions.png)
+*Flytrap SDK Setup Instructions*
 
 4. **Add Users to Projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You’ll be prompted to add users, who can then be assigned to specific projects. Users only have access to error data for the
 projects they are assigned to.
 
-![manageUsers](https://github.com/getflytrap/.github/blob/main/profile/adminConsole.png)
+![Manage users page](https://github.com/getflytrap/.github/blob/main/profile/adminConsole.png)
+*Flytrap Admin Dashboard Page for Managing Users*
 
 5. **Test Flytrap Setup:** The Flytrap SDK setup instructions include a code snippet for generating a sample error. You can add this to your application to test that the Flytrap infrastructure and SDK installation have been set up correctly.
 
@@ -124,7 +128,8 @@ projects they are assigned to.
 
 1. **Access the Dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in real-time.
 
-![projectsDashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
+![Projects dashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
+*Projects Overview Page in Flytrap Dashboard*
 
 2. **View and Filter Errors:** Developers can view all project errors on the Issues page and use the filtering tools to focus on:
    - Handled versus unhandled errors
@@ -133,7 +138,8 @@ projects they are assigned to.
 
     This helps prioritize fixes for issues with the greatest user impact or urgency.
 
-    ![issuesPage](https://github.com/getflytrap/.github/blob/main/profile/issuesPage.png)
+    ![Issues page](https://github.com/getflytrap/.github/blob/main/profile/issuesPage.png)
+    *Issues Page for Viewing All Error Data for a Project*
 
 3. **View Error Data:** The dashboard provides a near real-time view of all captured errors, sorted by project. Error data includes:
    - **Error type**
@@ -142,8 +148,14 @@ projects they are assigned to.
    - **Timestamp**
 
    Use this data to understand the context and impact of each error.
+   ![Error page](https://github.com/getflytrap/.github/blob/main/profile/errorPage.png)
+   *Error Page for Viewing Details of a Single Error*
 
-   ![expressStacktrace](https://github.com/getflytrap/.github/blob/main/profile/expressStacktrace.png)
+   When stack trace data is available, users can interact with it by clicking on each line in the stack trace. Clicking expands
+   the corresponding section to reveal the error line with red syntax highlighting, providing quick visual context for the issue.
+
+   ![Express stack trace](https://github.com/getflytrap/.github/blob/main/profile/expressStacktrace.png)
+   *Expandable Error Stack Trace with Syntax Highlighting*
 
 4. **Resolve Errors:** Errors can be:
    - Marked as handled (indicating that the error has been addressed).
