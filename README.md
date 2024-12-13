@@ -126,7 +126,7 @@ projects they are assigned to.
 
 ### Developer Dashboard
 
-1. **Access the Dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in real-time.
+1. **Access the Dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in near real-time.
 
 ![Projects dashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
 *Projects Overview Page in Flytrap Dashboard*
