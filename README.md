@@ -102,7 +102,7 @@ using the default admin email and password provided in the command line Terrafor
 2. **Create Projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
 Vanilla Js, Express, Flask).
 
-![projectsDashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
+![createProject](https://github.com/getflytrap/.github/blob/main/profile/projectSetup.png)
 
 3. **Follow SDK Setup Instructions:** The admin console provides detailed installation instructions for each SDK.
    - The React and Express SDKs are available as npm packages.
@@ -142,6 +142,8 @@ projects they are assigned to.
    - **Timestamp**
 
    Use this data to understand the context and impact of each error.
+
+   ![expressStacktrace](https://github.com/getflytrap/.github/blob/main/profile/expressStacktrace.png)
 
 4. **Resolve Errors:** Errors can be:
    - Marked as handled (indicating that the error has been addressed).
