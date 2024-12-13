@@ -94,25 +94,48 @@ After Terraform completes the setup, it will generate several outputs critical f
 
 ### Admin Console
 
-1. **Log in to the admin console:** Visit the Flytrap client dashboard url in the browser (or use your custom domain if you've configured DNS). Log in
+1. **Log in to the Admin Console:** Visit the Flytrap client dashboard url in the browser (or use your custom domain if you've configured DNS). Log in
 using the default admin email and password provided in the command line Terraform outputs. Select Change Password to update your default admin email and password.
 
-2. **Create projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
+![loginPage](https://github.com/getflytrap/.github/blob/main/profile/loginPage.png)
+
+2. **Create Projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
 Vanilla Js, Express, Flask).
 
-3. **Follow SDK setup instructions:** The admin console provides detailed installation instructions for each SDK. React and Express SDK packages are
-available through npm, the Flask SDK package is available through PyPi, and the Vanilla JS SDK is installed by adding a script tag to your exisitng application. You'll also be provided with a code snippet for initializing the Flytrap SDK in your application.
+![projectsDashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
 
-4. **Add users to projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You'll be prompted to add users, and you can then assign those users to your projects. Users only have access to error data for the
+3. **Follow SDK Setup Instructions:** The admin console provides detailed installation instructions for each SDK.
+   - The React and Express SDKs are available as npm packages.
+   - The Flask SDK is available as a PyPi package.
+   - The Vanilla JS SDK is installed by adding a script tag to your existing application.
+
+You'll be provided with a code snippet for initializing the Flytrap SDK in your application. You can also choose to manually add Flytrap's `captureException` method to your application as needed to catch data about handled errors (e.g., inside a try/catch block).
+
+![sdkSetup](https://github.com/getflytrap/.github/blob/main/profile/reactSDKInstructions.png)
+
+4. **Add Users to Projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You'll be prompted to add users, and you can then assign those users to your projects. Users only have access to error data for the
 projects they are assigned to.
 
-5. **Test Flytrap setup:** The Flytrap SDK setup instructions include a code snippet for generating a sample error. You can add this to your application to test that the Flytrap infrastructure and SDK installation have been set up correctly.
+![manageUsers](https://github.com/getflytrap/.github/blob/main/profile/adminConsole.png)
+
+5. **Test Flytrap Setup:** The Flytrap SDK setup instructions include a code snippet for generating a sample error. You can add this to your application to test that the Flytrap infrastructure and SDK installation have been set up correctly.
 
 ### Developer Dashboard
 
-1. **Access the dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in real-time.
+1. **Access the Dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in real-time.
 
-2. **View error data:** The dashboard provides a near real-time view of all captured errors, sorted by project. Error data includes:
+![projectsDashboard](https://github.com/getflytrap/.github/blob/main/profile/projectsDashboard.png)
+
+2. **View and Filter Errors:** Developers can view all project errors on the Issues page and use the filtering tools to focus on:
+   - Handled vs unhandled errors
+   - Resolved vs unresolved errors
+   - Time periods
+
+    This helps prioritize fixes for issues with the greatest user impact or urgency.
+
+    ![issuesPage](https://github.com/getflytrap/.github/blob/main/profile/issuesPage.png)
+
+3. **View Error Data:** The dashboard provides a near real-time view of all captured errors, sorted by project. Error data includes:
    - **Error type**
    - **Stack trace**
    - **Affected users**
@@ -120,23 +143,15 @@ projects they are assigned to.
 
    Use this data to understand the context and impact of each error.
 
-3. **Filter errors:** Developers can use the filtering tools to focus on:
-   - Handled vs unhandled errors
-   - Resolved vs unresolved errors
-   - Time periods
-
-    This helps prioritize fixes for issues with the greatest user impact or urgency.
-
-4. **Resolve errors:** Errors can be:
+4. **Resolve Errors:** Errors can be:
    - Marked as handled (indicating that the error has been addressed).
    - Deleted (if the error no longer needs attention).
 
    The interface is designed to streamline error resolution and ensure a smooth workflow.
 
-5. **Monitor user impact:** Flytrap tracks how many users are affected by each error. This data provides actionable insights for prioritizing fixes, allowing developers to focus on high-impact issues first.
+5. **Monitor User Impact:** Flytrap tracks how many users are affected by each error. This data provides actionable insights for prioritizing fixes, allowing developers to focus on high-impact issues first.
 
-6. **Iterate and improve:** Use Flytrap to continuously monitor your applications for new issues and ensure errors are resolved promptly. The dashboard’s intuitive interface minimizes distractions, allowing teams to focus on improving the user experience.
-
+6. **Iterate and Improve:** Use Flytrap to continuously monitor your applications for new issues and ensure errors are resolved promptly. The dashboard’s intuitive interface minimizes distractions, allowing teams to focus on improving the user experience.
 
 ## 🖥️ Managing Your Flytrap Infrastructure
 
