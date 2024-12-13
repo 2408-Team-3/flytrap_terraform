@@ -34,7 +34,8 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
-variable "s3_bucket_name" {
+variable "bucket_name" {
   description = "Name of the S3 bucket"
   type        = string
+  default     = "flytrap-sourcemaps-bucket"
 }

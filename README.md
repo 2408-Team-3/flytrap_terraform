@@ -23,7 +23,7 @@ To deploy Flytrap in your AWS account, follow these steps:
     ```
 
 ## 🕵️‍♀️ Setting Up Secrets
-Flytrap uses AWS Secrets Manager to securely store sensitive information like database credentials and JWT secret keys.
+Flytrap uses AWS Secrets Manager to securely store sensitive information like database credentials.
 
 1. **Create Database Credentials:** Run the following command to create a secret for your PostgreSQL database credentials. Replace the values as necessary:
 
@@ -37,17 +37,6 @@ Flytrap uses AWS Secrets Manager to securely store sensitive information like da
     - `flytrap_admin`: Replace with your desired PostgreSQL username.
     - `flytrap_password`: Replace with your desired PostgreSQL password.
     - `us-east-1`: Replace with your AWS region.
-
-2. **Create a JWT Secret Key:** Run the following command to create a secret for the JWT secret key used for secure communication with the Flytrap API:
-
-    ```bash
-    aws secretsmanager create-secret \
-      --name jwt_secret_key \
-      --description "JWT Secret Key for Flytrap API" \
-      --secret-string "{\"jwt_secret_key\":\"$(openssl rand -hex 32)\"}"
-    ```
-    
-    This generates a secure 32-byte random key for JWT signing.
 
 ## 📦 Deploying Flytrap
 1. **Initialize Terraform:** Run the following command to initialize Terraform and download the required providers:
@@ -101,6 +90,54 @@ After Terraform completes the setup, it will generate several outputs critical f
 
 4. **Start Using Flytrap:** Access the dashboard using the `flytrap_client_dashboard_url`, log in with your updated admin credentials, and begin managing projects, users, and errors.
 
+## 📗 How to Use Flytrap
+
+### Admin Console
+
+1. **Log in to the admin console:** Visit the Flytrap client dashboard url in the browser (or use your custom domain if you've configured DNS). Log in
+using the default admin email and password provided in the command line Terraform outputs. Select Change Password to update your default admin email and password.
+
+2. **Create projects:** Click on Create Project. Give your project a name and select from among the available SDKs (React,
+Vanilla Js, Express, Flask).
+
+3. **Follow SDK setup instructions:** The admin console provides detailed installation instructions for each SDK. React and Express SDK packages are
+available through npm, the Flask SDK package is available through PyPi, and the Vanilla JS SDK is installed by adding a script tag to your exisitng application. You'll also be provided with a code snippet for initializing the Flytrap SDK in your application.
+
+4. **Add users to projects:** Once a Flytrap SDK is initialized in your application, you can add developers to each project. Select Create New User in the admin console. You'll be prompted to add users, and you can then assign those users to your projects. Users only have access to error data for the
+projects they are assigned to.
+
+5. **Test Flytrap setup:** The Flytrap SDK setup instructions include a code snippet for generating a sample error. You can add this to your application to test that the Flytrap infrastructure and SDK installation have been set up correctly.
+
+### Developer Dashboard
+
+1. **Access the dashboard:** After being assigned to a project, developers can log in to the Flytrap dashboard using their credentials. The dashboard serves as the central hub for monitoring and resolving errors in real-time.
+
+2. **View error data:** The dashboard provides a near real-time view of all captured errors, sorted by project. Error data includes:
+   - **Error type**
+   - **Stack trace**
+   - **Affected users**
+   - **Timestamp**
+
+   Use this data to understand the context and impact of each error.
+
+3. **Filter errors:** Developers can use the filtering tools to focus on:
+   - Handled vs unhandled errors
+   - Resolved vs unresolved errors
+   - Time periods
+
+    This helps prioritize fixes for issues with the greatest user impact or urgency.
+
+4. **Resolve errors:** Errors can be:
+   - Marked as handled (indicating that the error has been addressed).
+   - Deleted (if the error no longer needs attention).
+
+   The interface is designed to streamline error resolution and ensure a smooth workflow.
+
+5. **Monitor user impact:** Flytrap tracks how many users are affected by each error. This data provides actionable insights for prioritizing fixes, allowing developers to focus on high-impact issues first.
+
+6. **Iterate and improve:** Use Flytrap to continuously monitor your applications for new issues and ensure errors are resolved promptly. The dashboard’s intuitive interface minimizes distractions, allowing teams to focus on improving the user experience.
+
+
 ## 🖥️ Managing Your Flytrap Infrastructure
 
 ### Modifying Configuration
@@ -126,8 +163,8 @@ This ensures all provisioned resources are cleaned up to avoid unnecessary charg
 
 ## 🚦 Important Notes
 
-1. **Secure Your AWS Account:** Ensure your AWS CLI is authenticated with appropriate permissions to create Secrets Manager entries, RDS instances, and other AWS resources.
-2. **Monitoring Costs:** Flytrap uses AWS resources like RDS and Lambda, which may incur costs. Monitor your AWS usage to avoid unexpected charges.
+1. **Secure Your AWS Account:** Ensure your AWS CLI is authenticated with appropriate permissions to create Secrets Manager entries and other AWS resources.
+2. **Monitoring Costs:** Flytrap uses AWS resources like RDS, Lambda, and EC2, which may incur costs. Monitor your AWS usage to avoid unexpected charges.
 
 For questions or issues, feel free to open an issue in this repository or contact the Flytrap team. 🚀
 

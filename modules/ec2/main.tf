@@ -177,16 +177,21 @@ locals {
   db_password = jsondecode(data.aws_secretsmanager_secret_version.flytrap_db_secret_version.secret_string)["password"]
 }
 
-data "aws_secretsmanager_secret" "flytrap_jwt_secret" {
-  name = "jwt_secret_key"
+resource "random_password" "jwt_secret_key_value" {
+  length           = 64
+  special          = false
 }
 
-data "aws_secretsmanager_secret_version" "flytrap_jwt_secret_version" {
-  secret_id = data.aws_secretsmanager_secret.flytrap_jwt_secret.id
+resource "aws_secretsmanager_secret" "jwt_secret_key" {
+  name        = "jwt_secret_key"
+  description = "JWT secret key for Flytrap API"
 }
 
-locals {
-  jwt_secret_key = jsondecode(data.aws_secretsmanager_secret_version.flytrap_jwt_secret_version.secret_string)["jwt_secret_key"]
+resource "aws_secretsmanager_secret_version" "jwt_secret_key_version" {
+  secret_id     = aws_secretsmanager_secret.jwt_secret_key.id
+  secret_string = jsonencode({
+    jwt_secret_key = random_password.jwt_secret_key_value.result
+  })
 }
 
 data "aws_ami" "amazon_linux_2023" {
@@ -235,7 +240,6 @@ resource "aws_instance" "flytrap_app" {
     api_gateway_usage_plan_id = var.api_gateway_usage_plan_id
     aws_region                = var.aws_region
     sdk_url                   = var.sdk_url
-    jwt_secret_key            = local.jwt_secret_key
   })
 
   tags = {
