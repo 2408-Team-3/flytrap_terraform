@@ -8,6 +8,14 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
   }
 }
 
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
+
+locals {
+  s3_bucket_name = "${var.bucket_name}-${random_id.bucket_suffix.hex}"
+}
+
 resource "aws_iam_role" "lambda_role" {
   name               = "${var.lambda_name}-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
@@ -63,8 +71,8 @@ resource "aws_iam_policy" "lambda_permissions_policy" {
         ]
         Effect = "Allow"
         Resource = [
-          "arn:aws:s3:::${var.s3_bucket_name}",
-          "arn:aws:s3:::${var.s3_bucket_name}/*"
+          "arn:aws:s3:::${local.s3_bucket_name}",
+          "arn:aws:s3:::${local.s3_bucket_name}/*"
         ]
       },
       {

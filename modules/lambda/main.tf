@@ -16,7 +16,7 @@ resource "aws_lambda_function" "flytrap_lambda" {
   role          = var.lambda_iam_role_arn
   handler       = var.lambda_handler
   runtime       = var.lambda_runtime
-  filename      = "${path.root}/lib/flytrap_error_processor.zip"
+  filename      = "${path.root}/modules/lambda/flytrap_error_processor.zip"
   timeout       = 180
 
   environment {

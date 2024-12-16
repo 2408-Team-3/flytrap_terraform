@@ -7,3 +7,8 @@ output "lambda_iam_role_arn" {
   description = "ARN for the lambda IAM role"
   value       = aws_iam_role.lambda_role.arn
 }
+
+output "s3_bucket_name" {
+  description = "Full name for the Flytrap sourcemaps S3 bucket"
+  value       = local.s3_bucket_name
+}
